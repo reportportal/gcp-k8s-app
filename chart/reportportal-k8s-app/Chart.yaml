@@ -1,0 +1,16 @@
+apiVersion: v2
+appVersion: "23.2"
+description: ReportPortal.io AI-powered Test Automation Dashboard
+name: reportportal-k8s-app
+version: 0.1.0
+sources:
+  - https://github.com/reportportal/kubernetes
+keywords:
+  - reportportal
+maintainers:
+  - name: reportportal
+    email: support@reportportal.io
+dependencies:
+  - name: reportportal
+    version: 23.2.1
+    repository: oci://us-docker.pkg.dev/epam-mp-rp/reportportal

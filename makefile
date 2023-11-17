@@ -12,7 +12,8 @@ configure:
 
 # Builds a Docker image and tags it with the name of your Google Cloud Registry, the app name, and the deployer.
 build:
-	docker build --tag $(registry)/$(app_name)/deployer:$(tag) .
+	@helm dependency build chart/reportportal-k8s-app
+	@docker build --tag $(registry)/$(app_name)/deployer:$(tag) .
 
 # Pushes the Docker image to your Google Cloud Registry.
 push:
@@ -20,7 +21,7 @@ push:
 
 # Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
 test-install:
-	kubectl create namespace test-ns
-	mpdev install \
+	@kubectl create namespace test-ns
+	@mpdev install \
 		--deployer=$(registry)/$(app_name)/deployer:$(tag) \
 		--parameters='{"name": "test-deployment", "namespace": "test-ns"}'

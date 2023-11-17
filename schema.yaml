@@ -22,7 +22,7 @@ properties:
     default: reportportal
     x-google-marketplace:
       type: NAMESPACE
-  uat.superadminInitPasswd:
+  uat.superadminInitPasswd.password:
     title: Superadmin Initial Password
     type: string
     description: The initial password for the superadmin user.

@@ -2,9 +2,7 @@
 
 ReportPortal Kubrentes repository wrapper for Google Cloud Platform Marketplace
 
-```bash
-helm fetch --untar --destination chart oci://us-docker.pkg.dev/epam-mp-rp/reportportal/reportportal
-```
+## Commands for the Deployer image
 
 Configures Docker to use gcloud as a credential helper for gcr.io:
 

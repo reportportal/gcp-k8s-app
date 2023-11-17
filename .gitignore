@@ -1,7 +1,3 @@
-chart/*
-chart/reportportal/*
-chart/reportportal/templates/*
-!chart/
-!chart/reportportal/
-!chart/reportportal/templates/
-!chart/reportportal/templates/application.yaml
+.vscode
+.idea
+chart/reportportal-k8s-app/charts
