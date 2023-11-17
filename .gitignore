@@ -1,0 +1,7 @@
+chart/*
+chart/reportportal/*
+chart/reportportal/templates/*
+!chart/
+!chart/reportportal/
+!chart/reportportal/templates/
+!chart/reportportal/templates/application.yaml
