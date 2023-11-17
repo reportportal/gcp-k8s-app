@@ -8,7 +8,7 @@ default: build
 
 # Configures Docker to use gcloud as a credential helper.
 configure:
-	gcloud auth configure-docker us-docker.pkg.dev
+	gcloud auth configure-docker gcr.io
 
 # Builds a Docker image and tags it with the name of your Google Cloud Registry, the app name, and the deployer.
 build:
