@@ -48,4 +48,4 @@ properties:
 required:
 - name
 - namespace
-- uat.superadminInitPasswd
+- uat.superadminInitPasswd.password
