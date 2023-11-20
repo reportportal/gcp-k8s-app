@@ -25,6 +25,7 @@ properties:
   uat.superadminInitPasswd.password:
     title: Superadmin Initial Password
     type: string
+    default: erebus
     description: The initial password for the superadmin user.
     x-google-marketplace:
       type: MASKED_FIELD
