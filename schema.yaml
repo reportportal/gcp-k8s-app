@@ -25,11 +25,10 @@ properties:
   uat.superadminInitPasswd.password:
     title: Superadmin Initial Password
     type: string
-    default: erebus
     description: The initial password for the superadmin user.
     x-google-marketplace:
       type: MASKED_FIELD
-  rbac.serviceAccount.name:
+  serviceAccountname:
     title: Service Account Name
     type: string
     description: The name of the service account to create.
