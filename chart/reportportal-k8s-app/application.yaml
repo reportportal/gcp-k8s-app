@@ -16,11 +16,25 @@ spec:
       app.kubernetes.io/name: "{{ .Release.Name }}"
   addOwnerRef: true
   componentKinds:
-  - group: ''
-    kind: PersistentVolumeClaim
+  # - group: ''
+  #   kind: PersistentVolumeClaim
   - group: ''
     kind: Secret
   - group: ''
+    kind: ServiceAccount
+  - group: ''
+    kind: ConfigMap
+  - group: ''
     kind: Service
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: networking.k8s.io
+    kind: Ingress
+  - group: batch
+    kind: Job
+  - group: apps
+    kind: StatefulSet
   - group: apps
     kind: Deployment
