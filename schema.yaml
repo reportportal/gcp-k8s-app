@@ -44,6 +44,7 @@ properties:
           - apiGroups: ["", "batch"]
             resources: ["pods","services", "jobs"]
             verbs: ["get", "list", "watch"]
+
 required:
 - name
 - namespace
