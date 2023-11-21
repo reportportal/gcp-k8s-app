@@ -54,8 +54,8 @@ reportportal:
 
   opensearch:
     image:
-    repository: "opensearchproject/opensearch"
-    tag: ""
+      repository: "opensearchproject/opensearch"
+      tag: ""
 
   minio:
     image:
