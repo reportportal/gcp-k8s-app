@@ -1,0 +1,64 @@
+reportportal:
+  serviceAccount:
+    create: false
+    name: ""
+
+  rbac:
+    create: false
+
+  serviceindex:
+    repository: reportportal/service-index
+    tag: 5.10.1
+
+  serviceui:
+    repository: reportportal/service-ui
+    tag: 5.10.0
+
+  serviceapi:
+    repository: reportportal/service-api
+    tag: 5.10.1
+
+  uat:
+    repository: reportportal/service-authorization
+    tag: 5.10.0
+    # superadminInitPasswd:
+    #   password: ""
+
+  servicejobs:
+    repository: reportportal/service-jobs
+    tag: 5.10.0
+
+  serviceanalyzer:
+    repository: reportportal/service-auto-analyzer
+    tag: 5.10.0
+
+  metricsgatherer:
+    repository: reportportal/service-metrics-gatherer
+    tag: 5.10.0
+
+  migrations:
+    repository: reportportal/migrations
+    tag: 5.10.1
+
+  postgresql:
+    image:
+      registry: docker.io
+      repository: bitnami/postgresql
+      tag: 11.13.0-debian-10-r12
+
+  rabbitmq:
+    image:
+      registry: docker.io
+      repository: bitnami/rabbitmq
+      tag: 3.10.8-debian-11-r4
+
+  opensearch:
+    image:
+    repository: "opensearchproject/opensearch"
+    tag: ""
+
+  minio:
+    image:
+      registry: docker.io
+      repository: bitnami/minio
+      tag: 2021.6.17-debian-10-r57

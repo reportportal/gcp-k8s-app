@@ -9,7 +9,78 @@ x-google-marketplace:
     releaseNote: >-
       A first release.
   # The images property will be filled in during part 2
-  images: {}
+  images:
+    reportportal-api:
+      properties:
+        reportportal.serviceapi.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.serviceapi.tag:
+          type: TAG
+    reportportal-index:
+        reportportal.serviceindex.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.serviceindex.tag:
+          type: TAG
+    reportportal-ui:
+        reportportal.serviceui.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.serviceui.tag:
+          type: TAG
+    reportportal-uat:
+        reportportal.uat.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.uat.tag:
+          type: TAG
+    reportportal-jobs:
+        reportportal.servicejobs.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.servicejobs.tag:
+          type: TAG
+    reportportal-analyzer:
+        reportportal.serviceanalyzer.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.serviceanalyzer.tag:
+          type: TAG
+    reportportal-metricsgatherer:
+        reportportal.metricsgatherer.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.metricsgatherer.tag:
+          type: TAG
+    reportportal-migrations:
+        reportportal.migrations.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.migrations.tag:
+          type: TAG
+    postgresql:
+      properties:
+        reportportal.postgresql.image.registry:
+          type: REGISTRY
+        reportportal.postgresql.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        reportportal.postgresql.image.tag:
+          type: TAG 
+    rabbitmq:
+      properties:
+        reportportal.rabbitmq.image.registry:
+          type: REGISTRY
+        reportportal.rabbitmq.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        reportportal.rabbitmq.image.tag:
+          type: TAG
+    opensearch:
+      properties:
+        reportportal.opensearch.image.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.opensearch.image.tag:
+          type: TAG
+    minio:
+      properties:
+        reportportal.minio.image.registry:
+          type: REGISTRY
+        reportportal.minio.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        reportportal.minio.image.tag:
+          type: TAG
 
 properties:
   name:
@@ -22,13 +93,14 @@ properties:
     default: reportportal
     x-google-marketplace:
       type: NAMESPACE
-  uat.superadminInitPasswd.password:
+  reportportal.uat.superadminInitPasswd.password:
     title: Superadmin Initial Password
     type: string
     description: The initial password for the superadmin user.
+    default: admin
     x-google-marketplace:
       type: MASKED_FIELD
-  serviceAccountname:
+  reportportal.serviceAccount.name:
     title: Service Account Name
     type: string
     description: The name of the service account to create.
@@ -38,7 +110,7 @@ properties:
       serviceAccount:
         description: The service account for handling deploy sequence.
         roles:
-        - type: Role               # This is a namespaced Role
+        - type: Role
           rulesType: CUSTOM        # We specify our own custom RBAC rules
           rules:
           - apiGroups: ["", "batch"]
@@ -48,4 +120,4 @@ properties:
 required:
 - name
 - namespace
-- uat.superadminInitPasswd.password
+- reportportal.uat.superadminInitPasswd.password
