@@ -6,59 +6,57 @@ reportportal:
   rbac:
     create: false
 
-  serviceindex:
-    repository: reportportal/service-index
-    tag: 5.10.1
+  # serviceindex:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-index
+  #   tag:
 
-  serviceui:
-    repository: reportportal/service-ui
-    tag: 5.10.0
+  # serviceui:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-ui
+  #   tag:
 
-  serviceapi:
-    repository: reportportal/service-api
-    tag: 5.10.1
+  # serviceapi:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-api
+  #   tag:
 
-  uat:
-    repository: reportportal/service-authorization
-    tag: 5.10.0
-    # superadminInitPasswd:
-    #   password: ""
+  # uat:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-authorization
+  #   tag:
 
-  servicejobs:
-    repository: reportportal/service-jobs
-    tag: 5.10.0
+  # servicejobs:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-jobs
+  #   tag:
 
-  serviceanalyzer:
-    repository: reportportal/service-auto-analyzer
-    tag: 5.10.0
+  # serviceanalyzer:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-auto-analyzer
+  #   tag:
 
-  metricsgatherer:
-    repository: reportportal/service-metrics-gatherer
-    tag: 5.10.0
+  # metricsgatherer:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-service-metrics-gatherer
+  #   tag:
 
-  migrations:
-    repository: reportportal/migrations
-    tag: 5.10.1
+  # migrations:
+  #   repository: gcr.io/epam-mp-rp/reportportal/reportportal-migrations
+  #   tag:
 
-  postgresql:
-    image:
-      registry: docker.io
-      repository: bitnami/postgresql
-      tag: 11.13.0-debian-10-r12
+  # postgresql:
+  #   image:
+  #     registry: gcr.io
+  #     repository: epam-mp-rp/reportportal/postgres
+  #     tag: 11.13.0-debian-10-r12
 
-  rabbitmq:
-    image:
-      registry: marketplace.gcr.io
-      repository: /google/rabbitmq3
-      tag: 3.10
+  # rabbitmq:
+  #   image:
+  #     registry: marketplace.gcr.io
+  #     repository: /google/rabbitmq3
+  #     tag: 3.10
 
-  opensearch:
-    image:
-      repository: "opensearchproject/opensearch"
-      tag: ""
+  # opensearch:
+  #   image:
+  #     repository: gcr.io/epam-mp-rp/reportportal/opensearch
+  #     tag:
 
-  minio:
-    image:
-      registry: docker.io
-      repository: bitnami/minio
-      tag: 2021.6.17-debian-10-r57
+  # minio:
+  #   image:
+  #     registry: gcr.io
+  #     repository: epam-mp-rp/reportportal/minio
+  #     tag: 2021.6.17-debian-10-r57

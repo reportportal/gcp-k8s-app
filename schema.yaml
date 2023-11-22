@@ -10,7 +10,7 @@ x-google-marketplace:
       A first release.
   # The images property will be filled in during part 2
   images:
-    '':
+    reportportal-api:
       properties:
         reportportal.serviceapi.repository:
           type: REPO_WITH_REGISTRY

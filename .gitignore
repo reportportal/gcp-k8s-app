@@ -1,3 +1,4 @@
 .vscode
 .idea
 chart/reportportal-k8s-app/charts
+chart/reportportal
