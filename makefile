@@ -30,10 +30,10 @@ push:
 
 # Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
 test-install:
-	@mpdev install --deployer=$(deployer_image) \
+	mpdev install --deployer=$(deployer_image) \
 		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "uat.superadminInitPasswd.password": "erebus"}'
 
 verify:
 	mpdev verify \
   	--deployer=$(deployer_image) \
-	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "uat.superadminInitPasswd.password": "erebus"}'
+	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.uat.superadminInitPasswd.password": "erebus"}'

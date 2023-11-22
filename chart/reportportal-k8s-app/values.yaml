@@ -48,9 +48,9 @@ reportportal:
 
   rabbitmq:
     image:
-      registry: docker.io
-      repository: bitnami/rabbitmq
-      tag: 3.10.8-debian-11-r4
+      registry: marketplace.gcr.io
+      repository: /google/rabbitmq3
+      tag: 3.10
 
   opensearch:
     image:

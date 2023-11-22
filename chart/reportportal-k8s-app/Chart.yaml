@@ -4,12 +4,15 @@ description: ReportPortal.io AI-powered Test Automation Dashboard
 name: reportportal-k8s-app
 version: 0.1.0
 sources:
-  - https://github.com/reportportal/kubernetes
+  - https://github.com/reportportal/gcp-k8s-app
 keywords:
   - reportportal
+  - gcp-k8s-app
 maintainers:
   - name: reportportal
     email: support@reportportal.io
+  - name: raikbitters
+    email: raikbitters@gmail.com
 dependencies:
   - name: reportportal
     version: 23.2.1

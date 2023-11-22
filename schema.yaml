@@ -10,7 +10,7 @@ x-google-marketplace:
       A first release.
   # The images property will be filled in during part 2
   images:
-    reportportal-api:
+    '':
       properties:
         reportportal.serviceapi.repository:
           type: REPO_WITH_REGISTRY
@@ -51,7 +51,7 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.tag:
           type: TAG
-    postgresql:
+    reportportal-postgresql:
       properties:
         reportportal.postgresql.image.registry:
           type: REGISTRY
@@ -59,7 +59,7 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.postgresql.image.tag:
           type: TAG 
-    rabbitmq:
+    reportportal-rabbitmq:
       properties:
         reportportal.rabbitmq.image.registry:
           type: REGISTRY
@@ -67,13 +67,13 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.rabbitmq.image.tag:
           type: TAG
-    opensearch:
+    reportportal-opensearch:
       properties:
         reportportal.opensearch.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio:
+    reportportal-minio:
       properties:
         reportportal.minio.image.registry:
           type: REGISTRY
