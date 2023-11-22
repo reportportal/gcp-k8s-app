@@ -1,8 +1,9 @@
 # Set the registry to your project GCR repo.
 registry := gcr.io/$(shell gcloud config get-value project | tr ':' '/')
 app_name := reportportal
-tag := 0.1.0
-deployer_image := $(registry)/$(app_name)/deployer:$(tag)
+release_track := 0.1
+release_version := 0.1.0
+deployer_image := $(registry)/$(app_name)/deployer
 cluster_name := rp-mp-test-cluster
 cluster_location := us-central1
 namespace := test-ns
@@ -29,13 +30,15 @@ build:
 	@echo
 	@echo "Building image $(deployer_image)"
 	@helm dependency build chart/reportportal-k8s-app
-	@docker build --tag $(deployer_image) .
+	@docker build --tag $(deployer_image):$(release_track) .
+	@docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes the Docker image to your Google Cloud Registry.
 push: build
 	@echo
 	@echo "Pushing image $(deployer_image)"
-	@docker push $(deployer_image)
+	@docker push $(deployer_image):$(release_track)
+	@docker push $(deployer_image):$(release_version)
 
 # Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
 test-install:
@@ -61,24 +64,36 @@ transfer-images: configure-docker
 transfer-dependency: configure-docker
 	@echo
 	@echo "Transferring Postgresql..."
+	postgres_gcr_image := $(registry)/$(app_name)/postgresql-$(postgres_tag)
 	@docker pull $(postgres_repo):$(postgres_tag)
-	@docker tag $(postgres_repo):$(postgres_tag) $(registry)/$(app_name)/postgresql:$(postgres_tag)
-	@docker push $(registry)/$(app_name)/postgresql:$(postgres_tag)
+	@docker tag $(postgres_repo):$(postgres_tag) $(postgres_gcr_image):$(release_track)
+	@docker tag $(postgres_repo):$(postgres_tag) $(postgres_gcr_image):$(release_version)
+	@docker push $(postgres_gcr_image):$(release_track)
+	@docker push $(postgres_gcr_image):$(release_version)
 	@echo
 	@echo "Transferring RabbitMQ..."
+	rabbitmq_gcr_image := $(registry)/$(app_name)/rabbitmq-$(rabbitmq_tag)
 	@docker pull $(rabbitmq_repo):$(rabbitmq_tag)
-	@docker tag $(rabbitmq_repo):$(rabbitmq_tag) $(registry)/$(app_name)/rabbitmq:$(rabbitmq_tag)
-	@docker push $(registry)/$(app_name)/rabbitmq:$(rabbitmq_tag)
+	@docker tag $(rabbitmq_repo):$(rabbitmq_tag) $(rabbitmq_gcr_image):$(release_track)
+	@docker tag $(rabbitmq_repo):$(rabbitmq_tag) $(rabbitmq_gcr_image):$(release_version)
+	@docker push $(rabbitmq_gcr_image):$(release_track)
+	@docker push $(rabbitmq_gcr_image):$(release_version)
 	@echo
 	@echo "Transferring OpenSearch..."
+	opensearch_gcr_image := $(registry)/$(app_name)/opensearch-$(opensearch_tag)
 	@docker pull $(opensearch_repo):$(opensearch_tag)
-	@docker tag $(opensearch_repo):$(opensearch_tag) $(registry)/$(app_name)/opensearch:$(opensearch_tag)
-	@docker push $(registry)/$(app_name)/opensearch:$(opensearch_tag)
+	@docker tag $(opensearch_repo):$(opensearch_tag) $(opensearch_gcr_image):$(release_track)
+	@docker tag $(opensearch_repo):$(opensearch_tag) $(opensearch_gcr_image):$(release_version)
+	@docker push $(opensearch_gcr_image):$(release_track)
+	@docker push $(opensearch_gcr_image):$(release_version)
 	@echo
 	@echo "Transferring Minio..."
+	minio_gcr_image := $(registry)/$(app_name)/minio-$(minio_tag)
 	@docker pull $(minio_repo):$(minio_tag)
-	@docker tag $(minio_repo):$(minio_tag) $(registry)/$(app_name)/minio:$(minio_tag)
-	@docker push $(registry)/$(app_name)/minio:$(minio_tag)
+	@docker tag $(minio_repo):$(minio_tag) $(minio_gcr_image):$(release_track)
+	@docker tag $(minio_repo):$(minio_tag) $(minio_gcr_image):$(release_version)
+	@docker push $(minio_gcr_image):$(release_track)
+	@docker push $(minio_gcr_image):$(release_version)
 
 transfer: transfer-images transfer-dependency
 

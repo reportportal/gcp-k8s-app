@@ -7,6 +7,8 @@ parser = argparse.ArgumentParser(description="Script for transferring used chart
 
 # Add the arguments
 parser.add_argument('--values-path', type=str, required=True, help='Path to the chart values.yaml file')
+parser.add_argument('--release-track' , type=str, required=True, help='Release track')
+parser.add_argument('--release-version', type=str, required=True, help='Release version')
 parser.add_argument('--primary-service', type=str, required=False, default='', help='Primary image service')
 parser.add_argument('--old-repo', type=str, required=False, default='reportportal', help='Old repository')
 parser.add_argument('--new-registry', type=str, required=False, default='gcr.io', help='New registry')
@@ -17,6 +19,8 @@ args = parser.parse_args()
 
 # Define the new registry
 values_file_path = args.values_path
+release_track = args.release_track
+release_version = args.release_version
 primary_image_service = args.primary_service
 old_repo = args.old_repo
 new_registry = args.new_registry
@@ -36,20 +40,20 @@ for key, value in values.items():
         # Construct the old and new image names
         if key == primary_image_service:
             old_image = f'{repository}:{tag}'
-            new_image = f'{new_registry}/{new_repo}:{tag}'
+            new_repository = f'{new_registry}/{new_repo}'
+            new_image_track = f'{new_repository}:{release_track}'
+            new_image_version = f'{new_repository}:{release_version}'
         else:
             old_image = f'{repository}:{tag}'
-            new_image = old_image.replace(f'{old_repo}/', f'{new_registry}/{new_repo}/reportportal-')
+            new_repository = {repository.replace(f'{old_repo}/', f'{new_registry}/{new_repo}/reportportal-')}
+            new_image_track = f'{new_repository}:{release_track}'
+            new_image_version = f'{new_repository}:{release_version}'
 
-        # Pull the old image, tag it with the new image name, and push it to the new registry
-        result = subprocess.run(['docker', 'manifest', 'inspect', new_image], capture_output=True, text=True)
-        if 'no such manifest' in result.stderr:
-            print(f'Key: {key}\nOld_image: {old_image}\nNew_image: {new_image}')
-            subprocess.run(['docker', 'pull', old_image])
-            subprocess.run(['docker', 'tag', old_image, new_image])
-            subprocess.run(['docker', 'push', new_image])
-            print(f'key: {key}\nImage: {new_image} pushed to {new_registry}\n')
-        elif result.returncode == 0:
-            print(f'key: {key}\nImage: {new_image} already exists\n')
-        else:
-            print(f'key: {key}\nError: {result.stderr}\n')
+        # Pull the old image, tag it with the new image names, and push them to the new registry
+        print(f'Key: {key}\nOld_image: {old_image}\nNew_image_track: {new_image_track}\nNew_image_version: {new_image_version}')
+        subprocess.run(['docker', 'pull', old_image])
+        subprocess.run(['docker', 'tag', old_image, new_image_track])
+        subprocess.run(['docker', 'tag', old_image, new_image_version])
+        subprocess.run(['docker', 'push', new_image_track])
+        subprocess.run(['docker', 'push', new_image_version])
+        print(f'key: {key}\nImage: {new_image_track} and {new_image_version} pushed to {new_registry}\n')
