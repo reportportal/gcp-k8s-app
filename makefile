@@ -49,7 +49,7 @@ verify:
 	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.uat.superadminInitPasswd.password": "erebus"}'
 
 # Transferring used Chart images from Docker Hub to GCR
-transfer: configure-docker
+transfer-images: configure-docker
 	@echo
 	@echo "Running helm fetch..."
 	-@helm fetch --untar --destination chart oci://us-docker.pkg.dev/epam-mp-rp/reportportal/reportportal
@@ -58,9 +58,28 @@ transfer: configure-docker
 	-@python scripts/transfer-images.py \
 		--values-path $(values_path)
 
-transfer-postgres: configure-docker
+transfer-dependency: configure-docker
 	@echo
-	docker pull $(postgres_repo):$(postgres_tag)
-	docker tag $(postgres_repo):$(postgres_tag) $(registry)/$(app_name)/postgres:$(postgres_tag)
+	@echo "Transferring Postgresql..."
+	@docker pull $(postgres_repo):$(postgres_tag)
+	@docker tag $(postgres_repo):$(postgres_tag) $(registry)/$(app_name)/postgresql:$(postgres_tag)
+	@docker push $(registry)/$(app_name)/postgresql:$(postgres_tag)
+	@echo
+	@echo "Transferring RabbitMQ..."
+	@docker pull $(rabbitmq_repo):$(rabbitmq_tag)
+	@docker tag $(rabbitmq_repo):$(rabbitmq_tag) $(registry)/$(app_name)/rabbitmq:$(rabbitmq_tag)
+	@docker push $(registry)/$(app_name)/rabbitmq:$(rabbitmq_tag)
+	@echo
+	@echo "Transferring OpenSearch..."
+	@docker pull $(opensearch_repo):$(opensearch_tag)
+	@docker tag $(opensearch_repo):$(opensearch_tag) $(registry)/$(app_name)/opensearch:$(opensearch_tag)
+	@docker push $(registry)/$(app_name)/opensearch:$(opensearch_tag)
+	@echo
+	@echo "Transferring Minio..."
+	@docker pull $(minio_repo):$(minio_tag)
+	@docker tag $(minio_repo):$(minio_tag) $(registry)/$(app_name)/minio:$(minio_tag)
+	@docker push $(registry)/$(app_name)/minio:$(minio_tag)
+
+transfer: transfer-images transfer-dependency
 
 push-all: push transfer
