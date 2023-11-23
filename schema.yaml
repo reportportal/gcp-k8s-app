@@ -4,54 +4,61 @@ x-google-marketplace:
   applicationApiVersion: v1beta1
   # The published version is required and MUST match the tag
   # of the deployer image
-  publishedVersion: '0.1.0'
+  publishedVersion: '23.2.1'
   publishedVersionMetadata:
     releaseNote: >-
       A first release.
   # The images property will be filled in during part 2
   images:
-    reportportal-api:
+    '':
       properties:
         reportportal.serviceapi.repository:
           type: REPO_WITH_REGISTRY
         reportportal.serviceapi.tag:
           type: TAG
     reportportal-index:
+      properties:
         reportportal.serviceindex.repository:
           type: REPO_WITH_REGISTRY
         reportportal.serviceindex.tag:
           type: TAG
     reportportal-ui:
+      properties:
         reportportal.serviceui.repository:
           type: REPO_WITH_REGISTRY
         reportportal.serviceui.tag:
           type: TAG
     reportportal-uat:
+      properties:
         reportportal.uat.repository:
           type: REPO_WITH_REGISTRY
         reportportal.uat.tag:
           type: TAG
     reportportal-jobs:
+      properties:
         reportportal.servicejobs.repository:
           type: REPO_WITH_REGISTRY
         reportportal.servicejobs.tag:
           type: TAG
     reportportal-analyzer:
+      properties:
         reportportal.serviceanalyzer.repository:
           type: REPO_WITH_REGISTRY
         reportportal.serviceanalyzer.tag:
           type: TAG
     reportportal-metricsgatherer:
+      properties:
         reportportal.metricsgatherer.repository:
           type: REPO_WITH_REGISTRY
         reportportal.metricsgatherer.tag:
           type: TAG
     reportportal-migrations:
+      properties:
         reportportal.migrations.repository:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.tag:
           type: TAG
-    postgresql:
+    postgresql-11:
       properties:
         reportportal.postgresql.image.registry:
           type: REGISTRY
@@ -59,7 +66,7 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.postgresql.image.tag:
           type: TAG 
-    rabbitmq:
+    rabbitmq-3:
       properties:
         reportportal.rabbitmq.image.registry:
           type: REGISTRY
@@ -67,13 +74,13 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.rabbitmq.image.tag:
           type: TAG
-    opensearch:
+    opensearch-2:
       properties:
         reportportal.opensearch.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio:
+    minio-2021:
       properties:
         reportportal.minio.image.registry:
           type: REGISTRY

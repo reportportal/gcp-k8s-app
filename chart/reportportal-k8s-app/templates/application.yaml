@@ -10,7 +10,7 @@ metadata:
 spec:
   descriptor:
     type: ReportPortal
-    version: '0.1.0'
+    version: '23.2.1'
   selector:
     matchLabels:
       app.kubernetes.io/name: "{{ .Release.Name }}"

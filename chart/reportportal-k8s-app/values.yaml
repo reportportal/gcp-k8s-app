@@ -5,26 +5,3 @@ reportportal:
 
   rbac:
     create: false
-
-  postgresql:
-    image:
-      registry: gcr.io
-      repository: epam-mp-rp/reportportal/postgres
-      tag: 11.13.0-debian-10-r12
-
-  rabbitmq:
-    image:
-      registry: marketplace.gcr.io
-      repository: /google/rabbitmq3
-      tag: 3.10
-
-  opensearch:
-    image:
-      repository: gcr.io/epam-mp-rp/reportportal/opensearch
-      tag:
-
-  minio:
-    image:
-      registry: gcr.io
-      repository: epam-mp-rp/reportportal/minio
-      tag: 2021.6.17-debian-10-r57
