@@ -1,9 +1,9 @@
 # Description: Makefile for ReportPortal GCP Marketplace application
 registry := gcr.io/$(shell gcloud config get-value project | tr ':' '/')
 app_name := reportportal
-release_version := $(shell grep 'publishedVersion:' schema.yaml | awk '{print $$2}' | tr -d "'")
+release_version := $(shell grep '^version:' chart/reportportal-k8s-app/Chart.yaml | awk '{print $$2}')
 release_track := $(shell echo $(release_version) | cut -d '.' -f 1,2)
-dependency_chart_version := $(release_version)
+dependency_chart_version := $(shell grep 'version:' chart/reportportal-k8s-app/Chart.yaml | tail -n 1 | awk '{print $$2}')
 deployer_image := $(registry)/$(app_name)/deployer
 values_path := tmp/general-values.yaml
 cluster_name := rp-mp-test-cluster
@@ -30,7 +30,7 @@ default: build
 encode-icon-base64:
 	@echo
 	@echo "Encoding icon to base64..."
-	@echo "data:image/png;base64,$(shell base64 -w 0 assets/icon.png)"
+	@echo "data:image/png;base64,$(shell base64 -w 0 assets/icon.png)" > assets/icon-base64.txt
 
 show-versions:
 	@echo
@@ -68,6 +68,9 @@ build:
 	@echo "Building image $(deployer_image)"
 	@helm dependency build chart/reportportal-k8s-app
 	@docker build --tag $(deployer_image):$(release_track) .
+		--build-arg REGISTRY=$(registry)/$(app_name) \
+		--build-arg TAG=$(release_version) \
+		--tag $(deployer_image):$(release_track) .
 	@docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes a Deployer Docker image to your Google Cloud Registry.

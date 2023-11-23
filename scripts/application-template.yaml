@@ -1,0 +1,42 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: "{{ .Release.Name }}"
+  namespace: "{{ .Release.Namespace }}"
+  labels:
+    app.kubernetes.io/name: "{{ .Release.Name }}"
+  annotations:
+    kubernetes-engine.cloud.google.com/icon: ''
+    marketplace.cloud.google.com/deploy-info: '{"partner_id": "0014M00001h33ktQAA",
+      "product_id": "reportportal", "partner_name": "EPAM Systems, Inc."}'
+spec:
+  descriptor:
+    type: ReportPortal
+    version: "$TAG"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: "{{ .Release.Name }}"
+  addOwnerRef: true
+  componentKinds:
+  # - group: ''
+  #   kind: PersistentVolumeClaim
+  - group: ''
+    kind: Secret
+  - group: ''
+    kind: ServiceAccount
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: Service
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: networking.k8s.io
+    kind: Ingress
+  - group: batch
+    kind: Job
+  - group: apps
+    kind: StatefulSet
+  - group: apps
+    kind: Deployment
