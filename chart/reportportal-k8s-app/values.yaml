@@ -5,3 +5,36 @@ reportportal:
 
   rbac:
     create: false
+
+  ingress:
+    class: gke
+
+  serviceui:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 128Mi
+
+  serviceapi:
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+
+  uat:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  
+  servicejobs:
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+
+  serviceanalyzer:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi

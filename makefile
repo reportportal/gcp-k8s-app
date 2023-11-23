@@ -3,9 +3,9 @@ registry := gcr.io/$(shell gcloud config get-value project | tr ':' '/')
 app_name := reportportal
 release_version := $(shell grep 'publishedVersion:' schema.yaml | awk '{print $$2}' | tr -d "'")
 release_track := $(shell echo $(release_version) | cut -d '.' -f 1,2)
-dependency_version := $(release_version)
+dependency_chart_version := $(release_version)
 deployer_image := $(registry)/$(app_name)/deployer
-values_path := tmp/dependency-values.yaml
+values_path := tmp/general-values.yaml
 cluster_name := rp-mp-test-cluster
 cluster_location := us-central1
 namespace := test-ns
@@ -27,11 +27,16 @@ minio_tag := 2021.6.17-debian-10-r57
 # Default target.
 default: build
 
+encode-icon-base64:
+	@echo
+	@echo "Encoding icon to base64..."
+	@echo "data:image/png;base64,$(shell base64 -w 0 assets/icon.png)"
+
 show-versions:
 	@echo
 	@echo "Release track: $(release_track)"
 	@echo "Release version: $(release_version)"
-	@echo "Dependency version: $(dependency_version)"
+	@echo "Dependency version: $(dependency_chart_version)"
 	
 # Configures Docker to use gcloud as a credential helper.
 configure-docker:
@@ -49,7 +54,7 @@ create-cluster:
 # Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
 test-install:
 	mpdev install --deployer=$(deployer_image):$(release_version) \
-		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "uat.superadminInitPasswd.password": "erebus"}'
+		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.uat.superadminInitPasswd.password": "erebus"}'
 
 # Verifies that your application is installed correctly.
 verify:
@@ -77,7 +82,7 @@ publish-images: configure-docker
 	@echo
 	@echo "Getting values from dependency chart..."
 	@helm dependency build chart/reportportal-k8s-app
-	@helm inspect values ./chart/reportportal-k8s-app/charts/reportportal-$(dependency_version).tgz > $(values_path)
+	@helm inspect values ./chart/reportportal-k8s-app/charts/reportportal-$(dependency_chart_version).tgz > $(values_path)
 	@echo
 	@echo "Running publishing images..."
 	-@python scripts/publish-gcr.py \
