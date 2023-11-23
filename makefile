@@ -25,7 +25,7 @@ minio_repo := bitnami/minio
 minio_tag := 2021.6.17-debian-10-r57
 
 # Default target.
-default: build
+default: push
 
 encode-icon-base64:
 	@echo
@@ -44,6 +44,7 @@ configure-docker:
 	@echo "Configuring Docker to use gcloud as a credential helper..."
 	@gcloud auth configure-docker gcr.io --quiet
 
+# Creates a new Kubernetes cluster in your Google Cloud project.
 create-cluster:
 	@echo
 	@echo "Creating cluster $(cluster_name) in $(cluster_location)..."
@@ -62,8 +63,14 @@ verify:
   	--deployer=$(deployer_image):$(release_version) \
 	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.uat.superadminInitPasswd.password": "erebus"}'
 
+# Build application definition from application-template.yaml
+build-app:
+	@echo
+	@echo "Building application definition..."
+	@python scripts/publish-gcr.py
+
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
-build:
+build-deployer:
 	@echo
 	@echo "Building image $(deployer_image)"
 	@helm dependency build chart/reportportal-k8s-app
@@ -74,7 +81,7 @@ build:
 	@docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes a Deployer Docker image to your Google Cloud Registry.
-push: build
+push: build-deployer
 	@echo
 	@echo "Pushing image $(deployer_image)"
 	@docker push $(deployer_image):$(release_track)
