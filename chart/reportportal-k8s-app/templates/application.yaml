@@ -14,6 +14,18 @@ spec:
   descriptor:
     type: ReportPortal
     version: '{{ .Chart.Version }}'
+    description: |-
+      ReportPortal is a web-based test automation dashboard that aggregates test results from 
+      different test frameworks and provides tools for quick analysis and reporting.
+
+      ## Support
+      Community support is available on
+      [ReportPortal Slack](https://slack.epmrpp.reportportal.io/).
+      
+      ## Issues
+      Please file any issues, bugs or feature requests on the
+      [ReportPortal official repo](https://github.com/reportportal/reportportal/issues).
+
   selector:
     matchLabels:
       app.kubernetes.io/name: '{{ .Release.Name }}'

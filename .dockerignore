@@ -3,6 +3,7 @@
 assets/
 tmp/
 scripts/
+tester/
 
 # Files should be ignored
 README.md
