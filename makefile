@@ -61,20 +61,14 @@ test-install:
 verify:
 	mpdev verify \
   	--deployer=$(deployer_image):$(release_version) \
-	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.uat.superadminInitPasswd.password": "erebus"}'
-
-# Build application definition from application-template.yaml
-build-app:
-	@echo
-	@echo "Building application definition..."
-	@python scripts/publish-gcr.py
+	--wait_timeout=1800
 
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
 build-deployer:
 	@echo
 	@echo "Building image $(deployer_image)"
 	@helm dependency build chart/reportportal-k8s-app
-	@docker build --tag $(deployer_image):$(release_track) .
+	@docker build \
 		--build-arg REGISTRY=$(registry)/$(app_name) \
 		--build-arg TAG=$(release_version) \
 		--tag $(deployer_image):$(release_track) .

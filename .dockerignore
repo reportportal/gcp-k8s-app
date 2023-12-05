@@ -1,0 +1,9 @@
+# Directories should be ignored
+.idea/
+assets/
+tmp/
+scripts/
+
+# Files should be ignored
+README.md
+makefile
