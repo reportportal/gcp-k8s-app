@@ -18,20 +18,32 @@ reportportal:
   serviceapi:
     resources:
       requests:
-        cpu: 1000m
+        cpu: 1
         memory: 2Gi
-
+    readinessProbe:
+      initialDelaySeconds: 200
+    livenessProbe:
+      initialDelaySeconds: 200
+      
   uat:
     resources:
       requests:
         cpu: 500m
         memory: 1Gi
-  
+    readinessProbe:
+      initialDelaySeconds: 200
+    livenessProbe:
+      initialDelaySeconds: 200
+      
   servicejobs:
     resources:
       requests:
         cpu: 250m
         memory: 512Mi
+      readinessProbe:
+        initialDelaySeconds: 300
+      livenessProbe:
+        initialDelaySeconds: 300
 
   serviceanalyzer:
     resources:

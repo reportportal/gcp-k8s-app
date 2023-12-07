@@ -8,7 +8,12 @@ x-google-marketplace:
   publishedVersionMetadata:
     releaseNote: >-
       A first release.
-  # The images property will be filled in during part 2
+  clusterConstraints:
+    resources:
+    - replicas: 1
+      requests:
+        cpu: 6
+        memory: 14Gi
   images:
     '':
       properties:
@@ -58,15 +63,15 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.tag:
           type: TAG
-    postgresql-11:
+    postgresql11:
       properties:
         reportportal.postgresql.image.registry:
           type: REGISTRY
         reportportal.postgresql.image.repository:
           type: REPO_WITHOUT_REGISTRY
         reportportal.postgresql.image.tag:
-          type: TAG 
-    rabbitmq-3:
+          type: TAG
+    rabbitmq3:
       properties:
         reportportal.rabbitmq.image.registry:
           type: REGISTRY
@@ -74,13 +79,13 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.rabbitmq.image.tag:
           type: TAG
-    opensearch-2:
+    opensearch2:
       properties:
         reportportal.opensearch.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio-2021:
+    minio2023:
       properties:
         reportportal.minio.image.registry:
           type: REGISTRY
@@ -101,13 +106,15 @@ properties:
   reportportal.uat.superadminInitPasswd.password:
     title: Superadmin Initial Password
     type: string
-    default: erebus
     description: The initial password for the superadmin user.
     x-google-marketplace:
-      type: MASKED_FIELD
+      type: GENERATED_PASSWORD
+      generatedPassword:
+        length: 16
   reportportal.serviceAccount.name:
     title: Service Account Name
     type: string
+    default: reportportal
     description: The name of the service account to create.
     x-google-marketplace:
       type: SERVICE_ACCOUNT
@@ -124,4 +131,3 @@ properties:
 required:
 - name
 - namespace
-- reportportal.uat.superadminInitPasswd.password

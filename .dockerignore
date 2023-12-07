@@ -1,9 +1,10 @@
 # Directories should be ignored
 .idea/
+.vscode/
 assets/
-tmp/
 scripts/
 tester/
+tmp/
 
 # Files should be ignored
 README.md

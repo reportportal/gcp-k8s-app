@@ -11,26 +11,17 @@ cluster_location := us-central1
 namespace := test-ns
 
 # Infrastucture images
-postgres_gcr_image := $(registry)/$(app_name)/postgresql-11
-postgres_repo := bitnami/postgresql
-postgres_tag := 11.13.0-debian-10-r12
-rabbitmq_gcr_image := $(registry)/$(app_name)/rabbitmq-3
-rabbitmq_repo := bitnami/rabbitmq
-rabbitmq_tag := 3.10.8-debian-11-r4
-opensearch_gcr_image := $(registry)/$(app_name)/opensearch-2
-opensearch_repo := opensearchproject/opensearch
-opensearch_tag := 2.9.0
-minio_gcr_image := $(registry)/$(app_name)/minio-2021
-minio_repo := bitnami/minio
-minio_tag := 2021.6.17-debian-10-r57
+postgres_origin_image := bitnami/postgresql:11.22.0
+postgres_rp_gcr_image := $(registry)/$(app_name)/postgresql11
+rabbitmq_origin_image := bitnami/rabbitmq:3.10.25
+rabbitmq_rp_gcr_image := $(registry)/$(app_name)/rabbitmq3
+opensearch_origin_image := opensearchproject/opensearch:2.11.1
+opensearch_rp_gcr_image := $(registry)/$(app_name)/opensearch2
+minio_origin_image := bitnami/minio:2023.11.20
+minio_rp_gcr_image := $(registry)/$(app_name)/minio2023
 
 # Default target.
 default: push
-
-encode-icon-base64:
-	@echo
-	@echo "Encoding icon to base64..."
-	@echo "data:image/png;base64,$(shell base64 -w 0 assets/icon.png)" > assets/icon-base64.txt
 
 show-versions:
 	@echo
@@ -41,7 +32,7 @@ show-versions:
 # Configures Docker to use gcloud as a credential helper.
 configure-docker:
 	@echo
-	@echo "Configuring Docker to use gcloud as a credential helper..."
+	@echo "Configuirng Docker to use gcloud as a credential helper..."
 	@gcloud auth configure-docker gcr.io --quiet
 
 # Creates a new Kubernetes cluster in your Google Cloud project.
@@ -55,7 +46,7 @@ create-cluster:
 # Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
 test-install:
 	mpdev install --deployer=$(deployer_image):$(release_version) \
-		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.uat.superadminInitPasswd.password": "erebus"}'
+		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
 
 # Verifies that your application is installed correctly.
 verify:
@@ -64,7 +55,7 @@ verify:
 	--wait_timeout=1800
 
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
-build-deployer:
+build: show-versions
 	@echo
 	@echo "Building image $(deployer_image)"
 	@helm dependency build chart/reportportal-k8s-app
@@ -75,14 +66,14 @@ build-deployer:
 	@docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes a Deployer Docker image to your Google Cloud Registry.
-push: build-deployer
+push: configure-docker build
 	@echo
 	@echo "Pushing image $(deployer_image)"
 	@docker push $(deployer_image):$(release_track)
 	@docker push $(deployer_image):$(release_version)
 
 # Publishing used Chart ReportPortal images from Docker Hub to GCR
-publish-images: configure-docker
+publish-images: show-versions configure-docker
 	@echo
 	@echo "Getting values from dependency chart..."
 	@helm dependency build chart/reportportal-k8s-app
@@ -98,33 +89,31 @@ publish-images: configure-docker
 publish-dependency: configure-docker
 	@echo
 	@echo "publishing Postgresql..."
-	@docker pull $(postgres_repo):$(postgres_tag)
-	@docker tag $(postgres_repo):$(postgres_tag) $(postgres_gcr_image):$(release_track)
-	@docker tag $(postgres_repo):$(postgres_tag) $(postgres_gcr_image):$(release_version)
-	@docker push $(postgres_gcr_image):$(release_track)
-	@docker push $(postgres_gcr_image):$(release_version)
+	@docker pull $(postgres_origin_image)
+	@docker tag $(postgres_origin_image) $(postgres_rp_gcr_image):$(release_track)
+	@docker tag $(postgres_origin_image) $(postgres_rp_gcr_image):$(release_version)
+	@docker push $(postgres_rp_gcr_image):$(release_track)
+	@docker push $(postgres_rp_gcr_image):$(release_version)
 	@echo
 	@echo "publishing RabbitMQ..."
-	@docker pull $(rabbitmq_repo):$(rabbitmq_tag)
-	@docker tag $(rabbitmq_repo):$(rabbitmq_tag) $(rabbitmq_gcr_image):$(release_track)
-	@docker tag $(rabbitmq_repo):$(rabbitmq_tag) $(rabbitmq_gcr_image):$(release_version)
-	@docker push $(rabbitmq_gcr_image):$(release_track)
-	@docker push $(rabbitmq_gcr_image):$(release_version)
+	@docker pull $(rabbitmq_origin_image)
+	@docker tag $(rabbitmq_origin_image) $(rabbitmq_rp_gcr_image):$(release_track)
+	@docker tag $(rabbitmq_origin_image) $(rabbitmq_rp_gcr_image):$(release_version)
+	@docker push $(rabbitmq_rp_gcr_image):$(release_track)
+	@docker push $(rabbitmq_rp_gcr_image):$(release_version)
 	@echo
 	@echo "publishing OpenSearch..."
-	@docker pull $(opensearch_repo):$(opensearch_tag)
-	@docker tag $(opensearch_repo):$(opensearch_tag) $(opensearch_gcr_image):$(release_track)
-	@docker tag $(opensearch_repo):$(opensearch_tag) $(opensearch_gcr_image):$(release_version)
-	@docker push $(opensearch_gcr_image):$(release_track)
-	@docker push $(opensearch_gcr_image):$(release_version)
+	@docker pull $(opensearch_origin_image)
+	@docker tag $(opensearch_origin_image) $(opensearch_rp_gcr_image):$(release_track)
+	@docker tag $(opensearch_origin_image) $(opensearch_rp_gcr_image):$(release_version)
+	@docker push $(opensearch_rp_gcr_image):$(release_track)
+	@docker push $(opensearch_rp_gcr_image):$(release_version)
 	@echo
 	@echo "publishing Minio..."
-	@docker pull $(minio_repo):$(minio_tag)
-	@docker tag $(minio_repo):$(minio_tag) $(minio_gcr_image):$(release_track)
-	@docker tag $(minio_repo):$(minio_tag) $(minio_gcr_image):$(release_version)
-	@docker push $(minio_gcr_image):$(release_track)
-	@docker push $(minio_gcr_image):$(release_version)
+	@docker pull $(minio_origin_image)
+	@docker tag $(minio_origin_image) $(minio_rp_gcr_image):$(release_track)
+	@docker tag $(minio_origin_image) $(minio_rp_gcr_image):$(release_version)
+	@docker push $(minio_rp_gcr_image):$(release_track)
+	@docker push $(minio_rp_gcr_image):$(release_version)
 
-publish: publish-images publish-dependency
-
-push-all: push publish
+publish-all: push publish-images publish-dependency
