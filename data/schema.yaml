@@ -93,6 +93,12 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.minio.image.tag:
           type: TAG
+    k8s-wait-for:
+      properties:
+        reportportal.k8sWaitFor.image.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.k8sWaitFor.image.tag:
+          type: TAG
 
 properties:
   name:
