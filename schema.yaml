@@ -15,53 +15,53 @@ x-google-marketplace:
         cpu: 6
         memory: 14Gi
   images:
-    '':
+    reportportal-api:
       properties:
-        reportportal.serviceapi.repository:
+        reportportal.serviceapi.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.serviceapi.tag:
+        reportportal.serviceapi.image.tag:
           type: TAG
     reportportal-index:
       properties:
-        reportportal.serviceindex.repository:
+        reportportal.serviceindex.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.serviceindex.tag:
+        reportportal.serviceindex.image.tag:
           type: TAG
     reportportal-ui:
       properties:
-        reportportal.serviceui.repository:
+        reportportal.serviceui.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.serviceui.tag:
+        reportportal.serviceui.image.tag:
           type: TAG
     reportportal-uat:
       properties:
-        reportportal.uat.repository:
+        reportportal.uat.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.uat.tag:
+        reportportal.uat.image.tag:
           type: TAG
     reportportal-jobs:
       properties:
-        reportportal.servicejobs.repository:
+        reportportal.servicejobs.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.servicejobs.tag:
+        reportportal.servicejobs.image.tag:
           type: TAG
     reportportal-analyzer:
       properties:
-        reportportal.serviceanalyzer.repository:
+        reportportal.serviceanalyzer.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.serviceanalyzer.tag:
+        reportportal.serviceanalyzer.image.tag:
           type: TAG
     reportportal-metricsgatherer:
       properties:
-        reportportal.metricsgatherer.repository:
+        reportportal.metricsgatherer.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.metricsgatherer.tag:
+        reportportal.metricsgatherer.image.tag:
           type: TAG
     reportportal-migrations:
       properties:
-        reportportal.migrations.repository:
+        reportportal.migrations.image.repository:
           type: REPO_WITH_REGISTRY
-        reportportal.migrations.tag:
+        reportportal.migrations.image.tag:
           type: TAG
     postgresql11:
       properties:
