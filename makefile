@@ -25,25 +25,6 @@ configure-docker:
 	@echo "Configuirng Docker to use gcloud as a credential helper..."
 	@gcloud auth configure-docker gcr.io --quiet
 
-# Creates a new Kubernetes cluster in your Google Cloud project.
-create-cluster:
-	@echo
-	@echo "Creating cluster $(cluster_name) in $(cluster_location)..."
-	@gcloud container clusters create-auto $(cluster_name) --location=$(cluster_location)
-	@kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
-	@kubectl create namespace $(namespace)
-
-# Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
-test-install:
-	mpdev install --deployer=$(deployer_image):$(release_version) \
-		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
-
-# Verifies that your application is installed correctly.
-verify:
-	mpdev verify \
-  	--deployer=$(deployer_image):$(release_version) \
-	--wait_timeout=1800
-
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
 build: show-versions
 	@echo
@@ -68,11 +49,29 @@ push: configure-docker build
 	@helm inspect values data/chart/reportportal-k8s-app/charts/reportportal-$(dependency_chart_version).tgz > $(values_path)
 	@echo
 	
-publish: show-versions configure-docker
+publish TARGET: show-versions configure-docker
 	@echo
 	@echo "Running publishing images..."
-	@VALUES_PATH=$(values_path) RELEASE_TRACK=$(release_track) RELEASE_VERSION=$(release_version) \
+	@VALUES_PATH=$(values_path) RELEASE_TRACK=$(release_track) RELEASE_VERSION=$(release_version) TARGET_IMAGES=$(TARGET)\
 		python scripts/publish-gcr.py
 
-
 publish-all: push publish
+
+# Creates a new Kubernetes cluster in your Google Cloud project.
+create-cluster:
+	@echo
+	@echo "Creating cluster $(cluster_name) in $(cluster_location)..."
+	@gcloud container clusters create-auto $(cluster_name) --location=$(cluster_location)
+	@kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
+	@kubectl create namespace $(namespace)
+
+# Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
+test-install:
+	mpdev install --deployer=$(deployer_image):$(release_version) \
+		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
+
+# Verifies that your application is installed correctly.
+verify:
+	mpdev verify \
+  	--deployer=$(deployer_image):$(release_version) \
+	--wait_timeout=1800
