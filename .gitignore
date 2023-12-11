@@ -1,4 +1,4 @@
-.vscode
-.idea
-#data/chart/reportportal-k8s-app/charts
-tmp/*
+.vscode/
+.idea/
+data/chart/reportportal-k8s-app/charts/
+tmp/
