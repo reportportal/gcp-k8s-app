@@ -33,7 +33,7 @@ build: show-versions
 	@docker build \
 		--build-arg REGISTRY=$(registry)/$(app_name) \
 		--build-arg TAG=$(release_version) \
-		--tag $(deployer_image):$(release_track) ./data/
+		--tag $(deployer_image):$(release_track) ./data
 	@docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes a Deployer Docker image to your Google Cloud Registry.
@@ -49,7 +49,7 @@ push: configure-docker build
 	@helm inspect values data/chart/reportportal-k8s-app/charts/reportportal-$(dependency_chart_version).tgz > $(values_path)
 	@echo
 	
-publish TARGET: show-versions configure-docker
+publish: show-versions configure-docker
 	@echo
 	@echo "Running publishing images..."
 	@VALUES_PATH=$(values_path) RELEASE_TRACK=$(release_track) RELEASE_VERSION=$(release_version) TARGET_IMAGES=$(TARGET)\

@@ -25,20 +25,64 @@ spec:
       ## Issues
       Please file any issues, bugs or feature requests on the
       [ReportPortal official repo](https://github.com/reportportal/reportportal/issues).
+  
+    maintainers:
+    - name: ReportPortal Team
+      email: support@reportportal.io
 
+    links:
+    - description: ReportPortal Website
+      url: https://reportportal.io
+    - description: ReportPortal Documentation
+      url: https://reportportal.io/docs
+
+    notes: |-
+        # Open ReportPortal UI
+
+        ReportPortal is exposed in a NodePort service.
+      
+        Get the external IP:
+        
+        ```shell
+        SERVICE_IP=$(kubectl get svc \
+          {{ include "common.fullname" . }}-ui \
+          --namespace {{ .Release.Namespace }} \
+          --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        echo "https://${SERVICE_IP}/"
+        ```
+  info:
+    - name: Service URL
+      type: Reference
+      valueFrom:
+        ingressRef:
+          name: {{ include "common.fullname" . }}-gateway-ingress
+          protocol: HTTPS
+    - name: Application Full Name
+      value: {{ include "common.fullname" . }}
+    - name: Application namespace
+      value: {{ .Release.Namespace }}
+    - name: Superadmin initial password  
+      type: Reference
+      valueFrom:
+        secretKeyRef:
+          name: reportportal-uat-init-password
+          key: password
+  
   selector:
     matchLabels:
       app.kubernetes.io/name: '{{ .Release.Name }}'
+  
   addOwnerRef: true
+  
   componentKinds:
+  - group: ''
+    kind: Service
   - group: ''
     kind: Secret
   - group: ''
-    kind: ServiceAccount
-  - group: ''
     kind: ConfigMap
   - group: ''
-    kind: Service
+    kind: ServiceAccount
   - group: rbac.authorization.k8s.io
     kind: Role
   - group: rbac.authorization.k8s.io

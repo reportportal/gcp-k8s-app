@@ -13,5 +13,5 @@ maintainers:
     email: support@reportportal.io
 dependencies:
   - name: reportportal
-    version: 23.2.1
+    version: 23.2.0
     repository: oci://us-docker.pkg.dev/epam-mp-rp/reportportal
