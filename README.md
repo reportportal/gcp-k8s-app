@@ -2,6 +2,25 @@
 
 ReportPortal Kubrentes repository wrapper for Google Cloud Platform Marketplace
 
+- [gcp-k8s-app](#gcp-k8s-app)
+  - [Overview](#overview)
+  - [Installation](#installation)
+    - [Quick install with Google Cloud Marketplace](#quick-install-with-google-cloud-marketplace)
+    - [Command-line instructions](#command-line-instructions)
+      - [Prerequisites](#prerequisites)
+        - [Setting up command-line tools](#setting-up-command-line-tools)
+        - [Creating a Google Kubernetes Engine cluster](#creating-a-google-kubernetes-engine-cluster)
+        - [Installing the Application resource definition](#installing-the-application-resource-definition)
+      - [Installing the Application](#installing-the-application)
+        - [Configuring environment variables](#configuring-environment-variables)
+        - [(Optional) Creating a Transport Layer Security (TLS) certificate](#optional-creating-a-transport-layer-security-tls-certificate)
+        - [Creating a namespace](#creating-a-namespace)
+        - [Create Service Account](#create-service-account)
+        - [Expanding the manifest template](#expanding-the-manifest-template)
+        - [Applying the manifest to your Kubernetes cluster](#applying-the-manifest-to-your-kubernetes-cluster)
+        - [Viewing your app in the Google Cloud Console](#viewing-your-app-in-the-google-cloud-console)
+        - [Open ReportPortal UI in your browser](#open-reportportal-ui-in-your-browser)
+
 ## Overview
 
 ReportPortal is a web-based test automation dashboard that aggregates test results from
@@ -21,12 +40,12 @@ Install ReportPortal to a Google Kubernetes Engine cluster using Google Cloud Ma
 
 You'll need the following tools:
 
-* [gcloud](https://cloud.google.com/sdk/gcloud/) - Google Cloud SDK
-* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - Kubernetes command-line tool
-* [docker](https://docs.docker.com/get-docker/) - Docker command-line tool
-* [git](https://git-scm.com/downloads) - Git command-line tool
-* [openssl](https://www.openssl.org/) - OpenSSL command-line tool
-* [helm](https://helm.sh/docs/intro/install/) - Helm command-line tool
+- [gcloud](https://cloud.google.com/sdk/gcloud/) - Google Cloud SDK
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) - Kubernetes command-line tool
+- [docker](https://docs.docker.com/get-docker/) - Docker command-line tool
+- [git](https://git-scm.com/downloads) - Git command-line tool
+- [openssl](https://www.openssl.org/) - OpenSSL command-line tool
+- [helm](https://helm.sh/docs/intro/install/) - Helm command-line tool
 
 Configure gcloud as a Docker credential helper:
 
@@ -53,7 +72,7 @@ Configure kubectl to connect to the new cluster:
 gcloud container clusters get-credentials ${CLUSTER} --zone ${ZONE}
 ```
 
-#### Installing the Application resource definition
+##### Installing the Application resource definition
 
 An Application resource is a collection of individual Kubernetes components, such as Services, StatefulSets, and so on, that you can manage as a group.
 
@@ -68,7 +87,7 @@ You need to run this command once.
 > **Note**: The Application resource is defined by the [Kubernetes SIG-apps community](https://github.com/kubernetes/community/tree/master/sig-apps).
 > You can find the source code at [GitHub Application repo](http://github.com/kubernetes-sigs/application).
 
-### Installing the Application
+#### Installing the Application
 
 Navigate to the data directory:
 
@@ -76,7 +95,7 @@ Navigate to the data directory:
 cd data
 ```
 
-#### Configuring environment variables
+##### Configuring environment variables
 
 Set the following environment variables:
 
@@ -122,7 +141,7 @@ alias generate_pwd="cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n
 export SUPERADMIN_PASSWORD=$(generate_pwd)
 ```
 
-#### (Optional) Creating a Transport Layer Security (TLS) certificate
+##### (Optional) Creating a Transport Layer Security (TLS) certificate
 
 You can use a self-signed TLS certificate or a certificate from a certificate authority.
 
@@ -149,7 +168,7 @@ export TLS_CERTIFICATE_KEY="$(cat /tmp/tls.key | base64)"
 export TLS_CERTIFICATE_CRT="$(cat /tmp/tls.crt | base64)"
 ```
 
-#### Creating a namespace
+##### Creating a namespace
 
 Create a namespace for the application:
 
@@ -157,7 +176,7 @@ Create a namespace for the application:
 kubectl create namespace ${NAMESPACE}
 ```
 
-#### Create Service Account
+##### Create Service Account
 
 To create the ReportPortal Service Account and ClusterRoleBinding:
 
@@ -169,7 +188,7 @@ kubectl create clusterrole "${SERVICE_ACCOUNT_NAME}-role" --verb=get,list,watch 
 kubectl create clusterrolebinding "${SERVICE_ACCOUNT_NAME}-rule" --clusterrole="${SERVICE_ACCOUNT_NAME}-role" --serviceaccount="${NAMESPACE}:${SERVICE_ACCOUNT_NAME}"
 ```
 
-#### Expanding the manifest template
+##### Expanding the manifest template
 
 ```bash
 helm template chart/reportportal-k8s-app \
@@ -211,7 +230,7 @@ helm template chart/reportportal-k8s-app \
     > "${APP_INSTANCE_NAME}_manifest.yaml"
 ```
 
-#### Applying the manifest to your Kubernetes cluster
+##### Applying the manifest to your Kubernetes cluster
 
 To apply the manifest to your Kubernetes cluster, use kubectl:
 
@@ -219,7 +238,7 @@ To apply the manifest to your Kubernetes cluster, use kubectl:
 kubectl apply -f "${APP_INSTANCE_NAME}_manifest.yaml" --namespace "${NAMESPACE}"
 ```
 
-#### Viewing your app in the Google Cloud Console
+##### Viewing your app in the Google Cloud Console
 
 To get the Cloud Console URL for your app, run the following command:
 
@@ -229,7 +248,7 @@ echo "https://console.cloud.google.com/kubernetes/application/${ZONE}/${CLUSTER}
 
 To view the app, open the URL in your browser.
 
-#### Open ReportPortal UI in your browser
+##### Open ReportPortal UI in your browser
 
 ```bash
 SERVICE_IP=$(kubectl get ingress \
