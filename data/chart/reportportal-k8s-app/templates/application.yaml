@@ -63,8 +63,8 @@ spec:
         && echo "Initial password: ${INITIAL_PASSWORD}"
         ```
 
-        > **NOTE:** If you already have a ReportPortal database with admin password, you can't use this password to login.
-        > This password works only for the initial login.
+        **NOTE:** If you already have a ReportPortal database with admin password, you can't use this password to login.
+        This password works only for the initial login.
 
   info:
     - name: Service URL
@@ -77,7 +77,7 @@ spec:
       value: {{ include "common.fullname" . }}
     - name: Application namespace
       value: {{ .Release.Namespace }}
-    - name: Superadmin initial password  
+    - name: Initial password
       type: Reference
       valueFrom:
         secretKeyRef:
