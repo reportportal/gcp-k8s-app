@@ -9,11 +9,17 @@ reportportal:
   ingress:
     class: gke
 
+  serviceindex:
+    service:
+      type: NodePort
+
   serviceui:
     resources:
       requests:
         cpu: 200m
         memory: 128Mi
+    service:
+      type: NodePort
 
   serviceapi:
     resources:
@@ -24,6 +30,8 @@ reportportal:
       initialDelaySeconds: 200
     livenessProbe:
       initialDelaySeconds: 200
+    service:
+      type: NodePort
       
   uat:
     resources:
@@ -34,6 +42,8 @@ reportportal:
       initialDelaySeconds: 200
     livenessProbe:
       initialDelaySeconds: 200
+    service:
+      type: NodePort
       
   servicejobs:
     resources:

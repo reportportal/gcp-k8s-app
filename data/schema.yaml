@@ -93,6 +93,12 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.minio.image.tag:
           type: TAG
+    k8s-wait-for:
+      properties:
+        reportportal.k8sWaitFor.image.repository:
+          type: REPO_WITH_REGISTRY
+        reportportal.k8sWaitFor.image.tag:
+          type: TAG
 
 properties:
   name:
@@ -111,6 +117,8 @@ properties:
       type: GENERATED_PASSWORD
       generatedPassword:
         length: 16
+        includeSymbols: False
+        base64: False
   reportportal.serviceAccount.name:
     title: Service Account Name
     type: string
@@ -127,7 +135,16 @@ properties:
           - apiGroups: ["", "batch"]
             resources: ["pods","services", "jobs"]
             verbs: ["get", "list", "watch"]
+  certificate:
+    type: string
+    x-google-marketplace:
+      type: TLS_CERTIFICATE
+      tlsCertificate:
+        generatedProperties:
+          base64EncodedPrivateKey: reportportal.ingress.tls.secret.base64EncodedPrivateKey
+          base64EncodedCertificate: reportportal.ingress.tls.secret.base64EncodedCertificate
 
 required:
 - name
 - namespace
+- certificate

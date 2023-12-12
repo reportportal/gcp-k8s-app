@@ -1,0 +1,113 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  annotations:
+    kubernetes-engine.cloud.google.com/icon: >-
+      data:image/png;base64,{{ .Files.Get "logo.png" | b64enc }}
+    marketplace.cloud.google.com/deploy-info: '{"partner_id": "0014M00001h33ktQAA",
+      "product_id": "reportportal", "partner_name": "EPAM Systems, Inc."}'
+  labels:
+    app.kubernetes.io/name: '{{ .Release.Name }}'
+  name: '{{ .Release.Name }}'
+  namespace: '{{ .Release.Namespace }}'
+spec:
+  descriptor:
+    type: ReportPortal
+    version: '{{ .Chart.Version }}'
+    description: |-
+      ReportPortal is a web-based test automation dashboard that aggregates test results from 
+      different test frameworks and provides tools for quick analysis and reporting.
+
+      ## Support
+      Community support is available on
+      [ReportPortal Slack](https://slack.epmrpp.reportportal.io/).
+      
+      ## Issues
+      You can provide feedback or report issues to
+      [ReportPortal official repo](https://github.com/reportportal/reportportal/issues).
+  
+    maintainers:
+    - name: ReportPortal Team
+      email: support@reportportal.io
+
+    links:
+    - description: ReportPortal Website
+      url: https://reportportal.io
+    - description: ReportPortal Documentation
+      url: https://reportportal.io/docs
+
+    notes: |-
+        ## Open ReportPortal UI
+
+        ReportPortal is exposed in a NodePort service.
+      
+        Get the external IP:
+        
+        ```bash
+        SERVICE_IP=$(kubectl get ingress \
+        --namespace {{ .Release.Namespace }} \
+        --output jsonpath='{$.items[0].status.loadBalancer.ingress[0].ip}') \
+        && echo "https://${SERVICE_IP}/"
+        ```
+
+        ## Get your application credentials
+
+        ReportPortal is deployed with a default `superadmin` user.
+        To get the initial password, run:
+
+        ```bash
+        INITIAL_PASSWORD=$(kubectl get secret \
+        --namespace {{ .Release.Namespace }} \
+        reportportal-uat-init-password \
+        -o jsonpath="{.data.password}" | base64 --decode) \
+        && echo "Initial password: ${INITIAL_PASSWORD}"
+        ```
+
+        **NOTE:** If you already have a ReportPortal database with admin password, you can't use this password to login.
+        This password works only for the initial login.
+
+  info:
+    - name: Service URL
+      type: Reference
+      valueFrom:
+        ingressRef:
+          name: {{ include "common.fullname" . }}-gateway-ingress
+          protocol: HTTPS
+    - name: Application Full Name
+      value: {{ include "common.fullname" . }}
+    - name: Application namespace
+      value: {{ .Release.Namespace }}
+    - name: Initial password
+      type: Reference
+      valueFrom:
+        secretKeyRef:
+          name: reportportal-uat-init-password
+          key: password
+  
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: '{{ .Release.Name }}'
+  
+  addOwnerRef: true
+  
+  componentKinds:
+  - group: ''
+    kind: Service
+  - group: ''
+    kind: Secret
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: ServiceAccount
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding
+  - group: networking.k8s.io
+    kind: Ingress
+  - group: batch
+    kind: Job
+  - group: apps
+    kind: StatefulSet
+  - group: apps
+    kind: Deployment
