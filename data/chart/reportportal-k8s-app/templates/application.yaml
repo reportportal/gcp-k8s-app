@@ -37,7 +37,7 @@ spec:
       url: https://reportportal.io/docs
 
     notes: |-
-        ## Open ReportPortal UI
+        #### Open ReportPortal UI
 
         ReportPortal is exposed in a NodePort service.
       
@@ -50,7 +50,7 @@ spec:
         && echo "https://${SERVICE_IP}/"
         ```
 
-        ## Get your application credentials
+        #### Get your application credentials
 
         ReportPortal is deployed with a default `superadmin` user.
         To get the initial password, run:
