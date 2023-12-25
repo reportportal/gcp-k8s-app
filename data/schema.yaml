@@ -8,12 +8,15 @@ x-google-marketplace:
   publishedVersionMetadata:
     releaseNote: >-
       A first release.
+  
   clusterConstraints:
-    resources:
-    - replicas: 1
-      requests:
-        cpu: 2
-        memory: 8Gi
+   assistedClusterCreation:
+    type: STRICT
+    gke:
+      nodePool:
+      - numNodes: 3
+        machineType: e2-standard-2
+
   images:
     reportportal-api:
       properties:
