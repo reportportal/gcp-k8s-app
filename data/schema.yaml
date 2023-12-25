@@ -12,8 +12,8 @@ x-google-marketplace:
     resources:
     - replicas: 1
       requests:
-        cpu: 6
-        memory: 14Gi
+        cpu: 2
+        memory: 8Gi
   images:
     reportportal-api:
       properties:
