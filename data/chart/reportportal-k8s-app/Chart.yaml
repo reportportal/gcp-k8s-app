@@ -1,17 +1,17 @@
 apiVersion: v2
-appVersion: "23.2"
+appVersion: "24.1"
 description: ReportPortal.io AI-powered Test Automation Dashboard
 name: reportportal-k8s-app
-version: 23.2.0
+version: 24.1.0
 sources:
-  - https://github.com/reportportal/gcp-k8s-app
+- https://github.com/reportportal/gcp-k8s-app
 keywords:
-  - reportportal
-  - gcp-k8s-app
+- reportportal
+- gcp-k8s-app
 maintainers:
-  - name: reportportal
-    email: support@reportportal.io
+- name: reportportal
+  email: support@reportportal.io
 dependencies:
-  - name: reportportal
-    version: 23.2.0
-    repository: oci://us-docker.pkg.dev/epam-mp-rp/reportportal
+- name: reportportal
+  version: 24.1.0
+  repository: oci://us-docker.pkg.dev/epam-mp-rp/reportportal

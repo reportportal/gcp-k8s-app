@@ -1,21 +1,21 @@
 x-google-marketplace:
   schemaVersion: v2
-
   applicationApiVersion: v1beta1
   # The published version is required and MUST match the tag
   # of the deployer image
   publishedVersion: "$TAG"
   publishedVersionMetadata:
     releaseNote: >-
-      A first release.
-  
+      A first 2024 release of the ReportPortal.io AI-powered Test Automation Dashboard.
   clusterConstraints:
-    assistedClusterCreation:
-      type: STRICT
-      gke:
-        nodePool:
-        - numNodes: 3
-          machineType: e2-standard-2
+    resources:
+    - requests:
+        cpu: 3
+        memory: 4Gi
+      affinity:
+        simpleNodeAffinity:
+          type: REQUIRE_MINIMUM_NODE_COUNT
+          minimumNodeCount: 3
 
   images:
     reportportal-api:
@@ -66,7 +66,7 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.image.tag:
           type: TAG
-    postgresql11:
+    postgresql16:
       properties:
         reportportal.postgresql.image.registry:
           type: REGISTRY
@@ -88,7 +88,7 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio2023:
+    minio2024:
       properties:
         reportportal.minio.image.registry:
           type: REGISTRY
@@ -102,7 +102,6 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.k8sWaitFor.image.tag:
           type: TAG
-
 properties:
   name:
     type: string
@@ -133,10 +132,10 @@ properties:
         description: The service account for handling deploy sequence.
         roles:
         - type: Role
-          rulesType: CUSTOM        # We specify our own custom RBAC rules
+          rulesType: CUSTOM # We specify our own custom RBAC rules
           rules:
           - apiGroups: ["", "batch"]
-            resources: ["pods","services", "jobs"]
+            resources: ["pods", "services", "jobs"]
             verbs: ["get", "list", "watch"]
   certificate:
     type: string
@@ -146,7 +145,6 @@ properties:
         generatedProperties:
           base64EncodedPrivateKey: reportportal.ingress.tls.secret.base64EncodedPrivateKey
           base64EncodedCertificate: reportportal.ingress.tls.secret.base64EncodedCertificate
-
 required:
 - name
 - namespace

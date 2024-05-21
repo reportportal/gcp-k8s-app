@@ -1,6 +1,6 @@
 dependencies:
 - name: reportportal
   repository: oci://us-docker.pkg.dev/epam-mp-rp/reportportal
-  version: 23.2.0
-digest: sha256:7d97babee81fe8566a44abced898929c9be481852a9c7d6cfa7fded3ac8b98dc
-generated: "2023-12-11T14:58:39.1518616+04:00"
+  version: 24.1.0
+digest: sha256:33dbe433a40ecc239afd5c57bc421264a79904ea40cb7c0e798dc0fa4eb283ee
+generated: "2024-05-21T17:32:57.631256032+02:00"
