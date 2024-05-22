@@ -10,8 +10,8 @@ x-google-marketplace:
   clusterConstraints:
     resources:
     - requests:
-        cpu: 3
-        memory: 4Gi
+        cpu: 4
+        memory: 6Gi
       affinity:
         simpleNodeAffinity:
           type: REQUIRE_MINIMUM_NODE_COUNT
@@ -111,6 +111,17 @@ properties:
     type: string
     x-google-marketplace:
       type: NAMESPACE
+  reportportal.ingress.hosts:
+    title: Hostname
+    type: string
+    description: The hostname for the ingress. Don't forget to set up the DNS record.
+  reportportal.ingress.tls.certificate.gcpManaged:
+    title: Enable GCP Managed Certificate
+    type: boolean
+    default: false
+    description: |
+      If you want to use HTTPS. You have to provide the hostname.
+      Note that a provisioning of the certificate may take some time.
   reportportal.uat.superadminInitPasswd.password:
     title: Superadmin Initial Password
     type: string
@@ -143,8 +154,8 @@ properties:
       type: TLS_CERTIFICATE
       tlsCertificate:
         generatedProperties:
-          base64EncodedPrivateKey: reportportal.ingress.tls.secret.base64EncodedPrivateKey
-          base64EncodedCertificate: reportportal.ingress.tls.secret.base64EncodedCertificate
+          base64EncodedPrivateKey: reportportal.ingress.tls.certificate.privateKey
+          base64EncodedCertificate: reportportal.ingress.tls.certificate.certificate
 required:
 - name
 - namespace

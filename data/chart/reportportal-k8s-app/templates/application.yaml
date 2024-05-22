@@ -63,20 +63,38 @@ spec:
         && echo "Initial password: ${INITIAL_PASSWORD}"
         ```
 
-        If you already have a ReportPortal database with admin password, you can't use this password to login.
-        This password works only for the initial login.
+        # Superadmin password constraints
+
+        Google Cloud Marketplace aoutomatically generates a password for the `superadmin` user
+        when you deploy ReportPortal.
+
+        If you already have a ReportPortal database with predefined superadmin
+        credentials, you can't use this password to login.
+        This password works only for the initial installation.
 
   info:
-    - name: Service URL
-      type: Reference
-      valueFrom:
-        ingressRef:
-          name: {{ include "common.fullname" . }}-gateway-ingress
-          protocol: HTTPS
     - name: Application Full Name
       value: {{ include "common.fullname" . }}
     - name: Application namespace
       value: {{ .Release.Namespace }}
+    - name: IP address
+      type: Reference
+      valueFrom:
+        ingressRef:
+          name: {{ include "common.fullname" . }}-gateway-ingress
+        {{- if or .Values.reportportal.ingress.tls.certificate.gcpManaged .Values.reportportal.ingress.tls.certificate.privateKey }}
+          protocol: HTTPS
+        {{- else }}
+          protocol: HTTP
+        {{- end }}
+        {{- if .Values.reportportal.ingress.hosts}}
+          host: {{ .Values.reportportal.ingress.hosts }}
+        {{- end }}
+  {{- if .Values.reportportal.ingress.hosts }}
+    - name: Hostname (DNS)
+      type: Reference
+      value: '{{ .Values.reportportal.ingress.hosts }}'
+  {{- end }}
     - name: Initial password
       type: Reference
       valueFrom:
@@ -98,6 +116,10 @@ spec:
   - group: ''
     kind: ConfigMap
   - group: ''
+    kind: PersistentVolumeClaim
+  - group: ''
+    kind: PersistentVolume
+  - group: ''
     kind: ServiceAccount
   - group: rbac.authorization.k8s.io
     kind: Role
@@ -105,6 +127,8 @@ spec:
     kind: RoleBinding
   - group: networking.k8s.io
     kind: Ingress
+  - group: networking.k8s.io
+    kind: ManagedCertificate
   - group: batch
     kind: Job
   - group: apps

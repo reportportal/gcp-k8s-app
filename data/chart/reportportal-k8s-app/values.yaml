@@ -8,6 +8,12 @@ reportportal:
 
   ingress:
     class: gce
+    hosts: ""
+    tls:
+      certificate:
+        gcpManaged: false
+        privateKey: null
+        certificate: null
 
   serviceindex:
     service:
