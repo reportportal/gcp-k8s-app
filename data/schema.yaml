@@ -10,8 +10,8 @@ x-google-marketplace:
   clusterConstraints:
     resources:
     - requests:
-        cpu: 4
-        memory: 6Gi
+        cpu: 8
+        memory: 12Gi
       affinity:
         simpleNodeAffinity:
           type: REQUIRE_MINIMUM_NODE_COUNT
