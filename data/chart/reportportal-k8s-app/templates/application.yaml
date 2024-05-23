@@ -110,28 +110,20 @@ spec:
   
   componentKinds:
   - group: ''
-    kind: Service
-  - group: ''
-    kind: Secret
-  - group: ''
     kind: ConfigMap
   - group: ''
     kind: PersistentVolumeClaim
   - group: ''
-    kind: PersistentVolume
+    kind: Secret
   - group: ''
-    kind: ServiceAccount
-  - group: rbac.authorization.k8s.io
-    kind: Role
-  - group: rbac.authorization.k8s.io
-    kind: RoleBinding
-  - group: networking.k8s.io
-    kind: Ingress
-  - group: networking.k8s.io
-    kind: ManagedCertificate
+    kind: Service
   - group: batch
     kind: Job
   - group: apps
     kind: StatefulSet
   - group: apps
     kind: Deployment
+  - group: networking.k8s.io
+    kind: Ingress
+  - group: networking.gke.io
+    kind: ManagedCertificate

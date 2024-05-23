@@ -15,7 +15,7 @@ num_nodes := 3
 namespace := test-ns
 
 # Default target.
-default: push
+default: deploy
 
 show-versions:
 	@echo

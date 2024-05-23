@@ -145,8 +145,20 @@ properties:
         - type: Role
           rulesType: CUSTOM # We specify our own custom RBAC rules
           rules:
-          - apiGroups: ["", "batch"]
-            resources: ["pods", "services", "jobs"]
+          - apiGroups: 
+            - ""
+            - "batch"
+            - "networking.gke.io"
+            - "networking.k8s.io"
+            resources: 
+            - "configmaps"
+            - "persistentvolumeclaims"
+            - "pods"
+            - "secrets"
+            - "services"
+            - "jobs"
+            - "ingresses"
+            - "managedcertificates"
             verbs: ["get", "list", "watch"]
   certificate:
     type: string
