@@ -69,7 +69,7 @@ deploy-deps: show-versions configure-docker
 deploy-all: deploy deploy-deps
 
 # Creates a new Kubernetes cluster in your Google Cloud project.
-create-test-cluster:
+test-cluster:
 	@echo
 	@echo "Creating cluster $(cluster_name) in $(cluster_location)..."
 	@gcloud container clusters create $(cluster_name) \
