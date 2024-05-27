@@ -117,6 +117,12 @@ spec:
     kind: Secret
   - group: ''
     kind: Service
+  - group: ''
+    kind: ServiceAccount
+  - group: rbac.authorization.k8s.io
+    kind: Role
+  - group: rbac.authorization.k8s.io
+    kind: RoleBinding    
   - group: batch
     kind: Job
   - group: apps
@@ -127,3 +133,5 @@ spec:
     kind: Ingress
   - group: networking.gke.io
     kind: ManagedCertificate
+  - group: app.k8s.io
+    kind: Application
