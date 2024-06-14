@@ -10,12 +10,8 @@ x-google-marketplace:
   clusterConstraints:
     resources:
     - requests:
-        cpu: 8
-        memory: 12Gi
-      affinity:
-        simpleNodeAffinity:
-          type: REQUIRE_MINIMUM_NODE_COUNT
-          minimumNodeCount: 3
+        cpu: 12
+        memory: 18Gi
 
   images:
     reportportal-api:
@@ -142,11 +138,18 @@ properties:
       serviceAccount:
         description: The service account for handling deploy sequence.
         roles:
+        # The ClusterRole used for creating GCP Managed Certificates
+        - type: ClusterRole
+          rulesType: CUSTOM # We specify our own custom RBAC rules
+          rules:
+          - apiGroups: ["apiextensions.k8s.io"]
+            resources: ["customresourcedefinitions"]
+            verbs: ['*']
         - type: Role
           rulesType: CUSTOM # We specify our own custom RBAC rules
           rules:
-          - apiGroups: ["", "batch"]
-            resources: ["pods", "services", "jobs"]
+          - apiGroups: ["", "batch", "networking.gke.io"]
+            resources: ["pods", "services", "jobs", "managedcertificates"]
             verbs: ['*']
   certificate:
     type: string
