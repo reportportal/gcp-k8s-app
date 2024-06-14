@@ -25,7 +25,7 @@ show-versions:
 	@echo "Deployer image: $(deployer_image)"
 	
 # Configures Docker to use gcloud as a credential helper.
-configure-docker:
+configure:
 	@echo
 	@echo "Configuirng Docker to use gcloud as a credential helper..."
 	@gcloud auth configure-docker gcr.io --quiet
@@ -43,14 +43,14 @@ build: show-versions
 	@docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes a Deployer Docker image to your Google Cloud Registry.
-deploy: configure-docker build
+deploy: configure build
 	@echo
 	@echo "Pushing deployer image $(deployer_image)"
 	@docker push $(deployer_image):$(release_track)
 	@docker push $(deployer_image):$(release_version)
 	
 # Publishing used Chart ReportPortal images from Docker Hub to GCR
-deploy-deps: show-versions configure-docker
+deploy-deps: show-versions configure
 	@echo
 	@echo "Running publishing images..."
 	@echo "Getting values from dependency chart..."
@@ -90,4 +90,5 @@ test-install:
 verify:
 	mpdev verify \
 	--deployer=$(deployer_image):$(release_version) \
-	--wait_timeout=1800
+	--wait_timeout=1800 \
+	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.docs.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
