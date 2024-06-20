@@ -91,7 +91,7 @@ spec:
           host: {{ .Values.reportportal.ingress.hosts }}
         {{- end }}
   {{- if .Values.reportportal.ingress.hosts }}
-    - name: Hostname (DNS)
+    - name: Hostname (FQDN)
       type: Reference
       value: '{{ .Values.reportportal.ingress.hosts }}'
   {{- end }}
