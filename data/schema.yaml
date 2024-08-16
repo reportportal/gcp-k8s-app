@@ -139,7 +139,7 @@ properties:
       serviceAccount:
         description: >
           Creates application resources in the cluster for
-          GCP managed certificates and deployment management.
+          GCP managed certificates and deployment management via apiextensions.k8s.io.
         roles:
         # The ClusterRole used for creating GCP Managed Certificates
         - type: ClusterRole
@@ -152,9 +152,14 @@ properties:
         - type: Role
           rulesType: CUSTOM
           rules:
+          # Allow the service account to get and list pods, services, and jobs
           - apiGroups: ["", "batch"]
-            resources: ["pods", "services", "jobs"]
-            verbs: ['*']
+            resources: ["pods","services", "jobs"]
+            verbs: ["get", "list", "watch"]
+          # Allow the service account to delete jobs
+          - apiGroups: ["batch"]
+            resources: ["jobs"]
+            verbs: ["delete"]
   certificate:
     type: string
     x-google-marketplace:
