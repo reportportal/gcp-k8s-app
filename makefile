@@ -14,8 +14,8 @@ machine_type := custom-4-6144
 num_nodes := 3
 namespace := test-ns
 
-# Default target.
-default: deploy
+# Deploy all images to GCR.
+default: deploy-all
 
 show-versions:
 	@echo
@@ -34,7 +34,7 @@ configure:
 build: show-versions
 	@echo
 	@echo "Building image $(deployer_image)"
-	@echo dependency update data/chart/reportportal-k8s-app
+	@helm dependency update data/chart/reportportal-k8s-app
 	@helm dependency build data/chart/reportportal-k8s-app
 	@docker build \
 		--build-arg REGISTRY=$(repository) \
@@ -49,7 +49,7 @@ deploy: configure build
 	@docker push $(deployer_image):$(release_track)
 	@docker push $(deployer_image):$(release_version)
 	
-# Publishing used Chart ReportPortal images from Docker Hub to GCR
+# Publishing used Chart ReportPortal images from Docker Hub to GCR.
 deploy-deps: show-versions configure
 	@echo
 	@echo "Running publishing images..."
@@ -66,6 +66,7 @@ deploy-deps: show-versions configure
 		TARGET_IMAGES=$(TARGET)\
 		python scripts/publish-gcr.py
 
+# Deploys deployer image and dependencie's images ti GCR.
 deploy-all: deploy deploy-deps
 
 # Creates a new Kubernetes cluster in your Google Cloud project.
