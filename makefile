@@ -3,9 +3,9 @@ registry := gcr.io
 app_name := reportportal
 gcp_project := $(shell gcloud config get-value project | tr ':' '/')
 repository := $(registry)/$(gcp_project)/$(app_name)
-release_version := $(shell grep '^version:' data/chart/reportportal-k8s-app/Chart.yaml | awk '{print $$2}')
-release_track := $(shell grep '^appVersion:' data/chart/reportportal-k8s-app/Chart.yaml | awk '{print $$2}')
-dependency_chart_version := $(shell grep 'version:' data/chart/reportportal-k8s-app/Chart.yaml | tail -n 1 | awk '{print $$2}')
+release_version := $(shell yq e '.version' data/chart/reportportal-k8s-app/Chart.yaml)
+release_track := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Chart.yaml)
+dependency_chart_version := $(release_version)
 deployer_image := $(repository)/deployer
 values_path := $(shell mkdir -p tmp && touch tmp/values.yaml && echo tmp/values.yaml)
 cluster_name := rp-mp-test-cluster
@@ -17,7 +17,7 @@ namespace := test-ns
 # Deploy all images to GCR.
 default: deploy-all
 
-show-versions:
+info:
 	@echo
 	@echo "Release track: $(release_track)"
 	@echo "Release version: $(release_version)"
@@ -31,7 +31,7 @@ configure:
 	@gcloud auth configure-docker gcr.io --quiet
 
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
-build: show-versions
+build: info
 	@echo
 	@echo "Building image $(deployer_image)"
 	@helm dependency update data/chart/reportportal-k8s-app
@@ -50,7 +50,7 @@ deploy: configure build
 	@docker push $(deployer_image):$(release_version)
 	
 # Publishing used Chart ReportPortal images from Docker Hub to GCR.
-deploy-deps: show-versions configure
+deploy-deps: info configure
 	@echo
 	@echo "Running publishing images..."
 	@echo "Getting values from dependency chart..."
