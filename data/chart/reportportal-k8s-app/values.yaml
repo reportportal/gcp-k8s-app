@@ -15,6 +15,13 @@ reportportal:
         privateKey: null
         certificate: null
 
+  hooks:
+    enabled: true
+    preUpgrade:
+      enabled: false
+    test:
+      enabled: true
+
   serviceindex:
     service:
       type: NodePort
