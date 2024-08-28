@@ -20,6 +20,8 @@ ReportPortal Kubrentes repository wrapper for Google Cloud Platform Marketplace
         - [Applying the manifest to your Kubernetes cluster](#applying-the-manifest-to-your-kubernetes-cluster)
         - [Viewing your app in the Google Cloud Console](#viewing-your-app-in-the-google-cloud-console)
         - [Open ReportPortal UI in your browser](#open-reportportal-ui-in-your-browser)
+  - [Development](#development)
+    - [Build custom Helm chart](#build-custom-helm-chart)
 
 ## Overview
 
@@ -258,3 +260,64 @@ SERVICE_IP=$(kubectl get ingress \
 ```
 
 Use superadmin as a login and the password you set in the environment variable SUPERADMIN_PASSWORD.
+
+## Development
+
+### Build custom Helm chart
+
+Download ReportPortal Helm chart and unpack it to the chart directory:
+
+```bash
+helm pull reportportal/reportportal --untar --untardir tmp/chart
+```
+
+Change the chart values or dependencies in the chart directory.
+
+Create a new Helm chart package:
+
+```bash
+helm package tmp/chart/reportportal
+```
+
+Set local environment variables:
+
+```bash
+export PROJECT_ID=$(gcloud config get-value project | tr ':' '/')
+export REPO_LOCATION=us
+export REPO_NAME=reportportal
+export VERSION=24.1.4
+```
+
+Get credentials for the Google Container Registry:
+
+```bash
+gcloud auth print-access-token | helm registry login -u oauth2accesstoken --password-stdin https://$REPO_LOCATION-docker.pkg.dev
+```
+
+Push the Helm chart to the Google Container Registry:
+
+```bash
+helm push reportportal-$VERSION.tgz oci://$REPO_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME
+```
+
+Update a version and dependencies in the Chart.yaml in the data directory:
+  
+```yaml
+version: &version 24.1.4
+dependencies:
+- name: reportportal
+  version: *version
+  repository: oci://us-docker.pkg.dev/epam-mp-rp/reportportal
+```
+
+After it you can install and test custom ReportPortal Helm chart:
+
+```bash
+make test-install
+```
+
+or verify via Google mpdev tool:
+
+```bash
+make verify
+```
