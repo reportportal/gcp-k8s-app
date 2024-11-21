@@ -94,8 +94,14 @@ verify:
 	--wait_timeout=1800 \
 	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.docs.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
 
-clean:
+clean-cluster: 
 	@ echo
-	@ echo "Clearing all resources..."
+	@ echo "Cleaning up the cluster..."
 	@ gcloud container clusters delete $(cluster_name) --location=$(cluster_location) --quiet
-	@ gcloud compute disks list --filter="zone:($(cluster_location))" --format="value(name)" | xargs -I {} gcloud compute disks delete {} --zone=$(zone) --quiet
+
+clean-disks:
+	@ echo
+	@ echo "Clearing all disks..."
+    @ gcloud compute disks list --filter="zones:($(cluster_location))" --format="value(name)" | xargs -I {} gcloud compute disks delete {} --zone=$(cluster_location) --quiet
+
+clean: clean-cluster clean-disks

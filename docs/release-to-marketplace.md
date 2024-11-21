@@ -130,6 +130,12 @@ PASSED
 ===========================
 ```
 
+### Delete cluster and disks
+
+```bash
+make clean
+```
+
 ### Release
 
 After you get the successful verification, you can release the new version.
