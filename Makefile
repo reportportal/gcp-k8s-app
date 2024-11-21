@@ -1,7 +1,7 @@
 # Description: Makefile for ReportPortal GCP Marketplace application
 registry := gcr.io
 app_name := reportportal
-gcp_project := $(shell gcloud config get-value project | tr ':' '/')
+gcp_project := epam-mp-rp
 repository := $(registry)/$(gcp_project)/$(app_name)
 release_version := $(shell yq e '.version' data/chart/reportportal-k8s-app/Chart.yaml)
 release_track := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Chart.yaml)
@@ -23,17 +23,18 @@ info:
 	@ echo "Release version: $(release_version)"
 	@ echo "Dependency version: $(dependency_chart_version)"
 	@ echo "Deployer image: $(deployer_image)"
-	
+
 # Configures Docker to use gcloud as a credential helper.
 configure:
 	@ echo
-	@ echo "Configuirng Docker to use gcloud as a credential helper..."
+	@ echo "Configuring Docker to use gcloud as a credential helper..."
 	@ gcloud auth configure-docker gcr.io --quiet
 
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
 build: info
 	@ echo
 	@ echo "Building image $(deployer_image)"
+	@ helm repo add reportportal https://reportportal.io/kubernetes
 	@ helm dependency update data/chart/reportportal-k8s-app
 	@ helm dependency build data/chart/reportportal-k8s-app
 	@ docker build \
@@ -48,7 +49,7 @@ deploy: configure build
 	@ echo "Pushing deployer image $(deployer_image)"
 	@ docker push $(deployer_image):$(release_track)
 	@ docker push $(deployer_image):$(release_version)
-	
+
 # Publishing used Chart ReportPortal images from Docker Hub to GCR.
 deploy-deps: info configure
 	@ echo
@@ -57,7 +58,6 @@ deploy-deps: info configure
 	@ helm dependency build data/chart/reportportal-k8s-app
 	@ helm inspect values data/chart/reportportal-k8s-app/charts/reportportal-$(dependency_chart_version).tgz > $(values_path)
 	@ echo
-
 	@ VALUES_PATH=$(values_path) \
 		NEW_REGISTRY=$(registry) \
 		NEW_REPO=$(gcp_project)/$(app_name) \
@@ -66,7 +66,7 @@ deploy-deps: info configure
 		TARGET_IMAGES=$(TARGET)\
 		python scripts/publish-gcr.py
 
-# Deploys deployer image and dependencie's images ti GCR.
+# Deploys deployer image and dependence's images ti GCR.
 deploy-all: deploy deploy-deps
 
 # Creates a new Kubernetes cluster in your Google Cloud project.
