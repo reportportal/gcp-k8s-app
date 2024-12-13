@@ -31,28 +31,22 @@ configure:
 	@ gcloud auth configure-docker gcr.io --quiet
 
 # Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
-build: info
+deploy: info
 	@ echo
 	@ echo "Building image $(deployer_image)"
 	@ helm repo add reportportal https://reportportal.io/kubernetes
 	@ helm dependency update data/chart/reportportal-k8s-app
 	@ helm dependency build data/chart/reportportal-k8s-app
-	@ docker build \
+	@ docker build\
+		--tag $(deployer_image):$(release_track) \
+		--tag $(deployer_image):$(release_version) \
 		--build-arg REGISTRY=$(repository) \
 		--build-arg TAG=$(release_version) \
-		--tag $(deployer_image):$(release_track) \
-		--annotation "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" \
+		--push \
 		./data
-	@ docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
+	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" $(deployer_image):$(release_track)
+	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" $(deployer_image):$(release_version)
 
-# Pushes a Deployer Docker image to your Google Cloud Registry.
-deploy: configure build
-	@ echo
-	@ echo "Pushing deployer image $(deployer_image)"
-	@ docker push $(deployer_image):$(release_track)
-	@ docker push $(deployer_image):$(release_version)
-
-# Publishing used Chart ReportPortal images from Docker Hub to GCR.
 deploy-deps: info configure
 	@ echo
 	@ echo "Running publishing images..."
