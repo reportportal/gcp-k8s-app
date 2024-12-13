@@ -62,7 +62,7 @@ for gcr_image_name, value in schema_file["x-google-marketplace"]["images"].items
     docker_pull = ['docker', 'pull', origin_image]
     docker_tag = ['docker', 'tag', origin_image]
     docker_push = ['docker', 'push']
-    annotation_command = ['gcrane', 'mutate', '-a', 'com.googleapis.cloudmarketplace.product.service.name=' + rpp_service_name]
+    annotation_command = ['crane', 'mutate', '-a', 'com.googleapis.cloudmarketplace.product.service.name=' + rpp_service_name]
     
     commands = [
         # docker pull origin_image
@@ -75,9 +75,9 @@ for gcr_image_name, value in schema_file["x-google-marketplace"]["images"].items
         docker_push + [new_image_track],
         # docker push new_image_version
         docker_push + [new_image_version],
-        # gcrane mutate -a com.googleapis.cloudmarketplace.product.service.name=rpp_service_name new_image_track
+        # crane mutate -a com.googleapis.cloudmarketplace.product.service.name=rpp_service_name new_image_track
         annotation_command + [new_image_track],
-        # gcrane mutate -a com.googleapis.cloudmarketplace.product.service.name=rpp_service_name new_image_version
+        # crane mutate -a com.googleapis.cloudmarketplace.product.service.name=rpp_service_name new_image_version
         annotation_command + [new_image_version]
     ]
 
