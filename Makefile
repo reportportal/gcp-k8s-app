@@ -40,7 +40,9 @@ build: info
 	@ docker build \
 		--build-arg REGISTRY=$(repository) \
 		--build-arg TAG=$(release_version) \
-		--tag $(deployer_image):$(release_track) ./data
+		--tag $(deployer_image):$(release_track) \
+		--annotation "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" \
+		./data
 	@ docker tag $(deployer_image):$(release_track) $(deployer_image):$(release_version)
 
 # Pushes a Deployer Docker image to your Google Cloud Registry.

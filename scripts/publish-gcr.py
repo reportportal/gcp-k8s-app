@@ -12,6 +12,7 @@ old_repo = os.getenv("OLD_REPO", "reportportal")
 new_registry = os.getenv("NEW_REGISTRY", "gcr.io")
 new_repo = os.getenv("NEW_REPO", "epam-mp-rp/reportportal")
 target_images = os.getenv("TARGET_IMAGES", "")
+rpp_service_name = os.getenv("RPP_SERVICE_NAME", "reportportal.endpoints.epam-mp-rp.cloud.goog")
 
 def load_yaml(file_path):
     with open(file_path, "r") as file:
@@ -57,16 +58,30 @@ for gcr_image_name, value in schema_file["x-google-marketplace"]["images"].items
 
     # Pull the old image, tag it with the new image names, and push them to the new registry
     print(f'Key: {values_node}\nOrigin_image: {origin_image}\nNew_image_track: {new_image_track}\nNew_image_version: {new_image_version}')
+
+    docker_pull = ['docker', 'pull', origin_image]
+    docker_tag = ['docker', 'tag', origin_image]
+    docker_push = ['docker', 'push']
+    annotation_command = ['gcrane', 'mutate', '-a', 'com.googleapis.cloudmarketplace.product.service.name=' + rpp_service_name]
     
-    docker_commands = [
-        ['docker', 'pull', origin_image],
-        ['docker', 'tag', origin_image, new_image_track],
-        ['docker', 'tag', origin_image, new_image_version],
-        ['docker', 'push', new_image_track],
-        ['docker', 'push', new_image_version]
+    commands = [
+        # docker pull origin_image
+        docker_pull,
+        # docker tag origin_image new_image_track
+        docker_tag + [new_image_track],
+        # docker tag origin_image new_image_version
+        docker_tag + [new_image_version],
+        # docker push new_image_track
+        docker_push + [new_image_track],
+        # docker push new_image_version
+        docker_push + [new_image_version],
+        # gcrane mutate -a com.googleapis.cloudmarketplace.product.service.name=rpp_service_name new_image_track
+        annotation_command + [new_image_track],
+        # gcrane mutate -a com.googleapis.cloudmarketplace.product.service.name=rpp_service_name new_image_version
+        annotation_command + [new_image_version]
     ]
 
-    for command in docker_commands:
+    for command in commands:
         result = subprocess.run(command, stdout=subprocess.PIPE)
         if result.returncode != 0:
             print(f'Command: {command}\nError: {result.stdout.decode("utf-8")}')
