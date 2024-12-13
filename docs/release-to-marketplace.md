@@ -13,6 +13,7 @@ For this guide, you need the following:
 - [gcloud gke auth plugin](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin) - Google Cloud SDK Kubernetes Engine plugin
 - [mpdev](https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/blob/master/docs/mpdev-references.md#overview-and-setup) - Google Cloud Marketplace development tool
 - [yq](https://github.com/mikefarah/yq/?tab=readme-ov-file#install) - YAML processor for parsing Chart.yaml
+- [crane](https://github.com/google/go-containerregistry/blob/main/cmd/crane/README.md) - tool for interacting with remote images and registries.
 
 ### Configure Google Cloud CLI
 
