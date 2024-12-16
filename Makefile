@@ -37,7 +37,7 @@ deploy: info
 	@ helm repo add reportportal https://reportportal.io/kubernetes
 	@ helm dependency update data/chart/reportportal-k8s-app
 	@ helm dependency build data/chart/reportportal-k8s-app
-	@ docker build\
+	@ docker buildx build \
 		--tag $(deployer_image):$(release_track) \
 		--tag $(deployer_image):$(release_version) \
 		--build-arg REGISTRY=$(repository) \

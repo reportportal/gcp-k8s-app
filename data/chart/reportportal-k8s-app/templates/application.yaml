@@ -13,7 +13,7 @@ metadata:
 spec:
   descriptor:
     type: ReportPortal
-    version: '{{ .Chart.Version }}'
+    version: '{{ .Chart.AppVersion }}'
     description: |-
       ReportPortal is a web-based test automation dashboard that aggregates test results from 
       different test frameworks and provides tools for quick analysis and reporting.
