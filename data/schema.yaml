@@ -51,12 +51,6 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.serviceanalyzer.image.tag:
           type: TAG
-    reportportal-metricsgatherer:
-      properties:
-        reportportal.metricsgatherer.image.repository:
-          type: REPO_WITH_REGISTRY
-        reportportal.metricsgatherer.image.tag:
-          type: TAG
     reportportal-migrations:
       properties:
         reportportal.migrations.image.repository:
