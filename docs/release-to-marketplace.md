@@ -51,11 +51,13 @@ chmod +x "$BIN_FILE"
 In the `data/chart/reportportal-k8s-app/Chart.yaml` file, update the `version` and `appVersion` fields:
 
 ```yaml
-appVersion: "24.2"
-version: &version 24.2.1
+appVersion: "25.1.0"
+version: &version 25.7.3
 ```
 
 The `appVersion` will be used as a release track version in the Marketplace.
+
+The `appVersion` must match the x.y.z version format.
 
 The `version` has to relate to the main ReportPortal Helm chart version.
 
@@ -109,12 +111,19 @@ gcloud container images list-tags gcr.io/epam-mp-rp/reportportal/k8s-wait-for
 
 ```bash
 make test-cluster
+make test-cluster-setup
 ```
 
 Check if the cluster is ready:
 
 ```bash
 kubectl get nodes
+```
+
+### Test install
+
+```bash
+make test-install
 ```
 
 ### Verify

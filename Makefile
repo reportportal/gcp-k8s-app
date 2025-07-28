@@ -1,7 +1,7 @@
 # Description: Makefile for ReportPortal GCP Marketplace application
 registry := gcr.io
 app_name := reportportal
-gcp_project := epam-mp-rp
+gcp_project := or2-msq-epm-rpp-b2iylu
 repository := $(registry)/$(gcp_project)/$(app_name)
 release_version := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Chart.yaml)
 release_track := $(shell echo $(release_version) | cut -d. -f1,2)
@@ -73,12 +73,19 @@ test-cluster:
 		--location=$(cluster_location) \
 		--machine-type=${machine_type} \
 		--num-nodes=${num_nodes}
+
+# Sets up the cluster for testing deployer.
+test-cluster-setup:
 	@ echo
 	@ echo "Add the application support CRD to the cluster..."
 	@ kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
+	@ echo
+	@ echo "Creating namespace $(namespace)..."
 	@ kubectl create namespace $(namespace)
+	@ echo
+	@ echo "Cluster setup complete."
 
-# Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
+# Installs your application into this namespace using `mpdev`.
 test-install:
 	mpdev install --deployer=$(deployer_image):$(release_version) \
 		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
