@@ -1,12 +1,11 @@
 global:
   security:
     allowInsecureImages: true
-
-reportportal:
   serviceAccount:
     create: false
     name: ""
 
+reportportal:
   rbac:
     create: false
 

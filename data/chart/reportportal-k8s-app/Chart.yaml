@@ -1,13 +1,23 @@
 apiVersion: v2
-appVersion: "24.2.2"
+appVersion: "25.1"
 description: ReportPortal.io AI-powered Test Automation Dashboard
 name: reportportal-k8s-app
-version: &version 24.12.17
+version: &version 25.7.3
 sources:
 - https://github.com/reportportal/gcp-k8s-app
 keywords:
-- reportportal
 - gcp-k8s-app
+- gcp-gke-app
+- reportportal
+- report portal
+- test results reporting service
+- test report dashboard
+- test automation reporting tools
+- test automation results dashboard
+- qa automation dashboard
+- qa metrics dashboard
+- automation test report
+- test execution dashboard
 maintainers:
 - name: reportportal
   email: support@reportportal.io
