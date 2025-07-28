@@ -121,13 +121,13 @@ properties:
       type: GENERATED_PASSWORD
       generatedPassword:
         length: 16
-        includeSymbols: False
+        includeSymbols: True
         base64: False
-  reportportal.serviceAccount.name:
-    title: Service Account Name
+  global.serviceAccount.name:
+    title: ReportPortal Service Account
     type: string
     default: reportportal
-    description: The name of the service account to create.
+    description: ReportPortal service account for bootstrapping the application.
     x-google-marketplace:
       type: SERVICE_ACCOUNT
       serviceAccount:
@@ -146,9 +146,13 @@ properties:
         - type: Role
           rulesType: CUSTOM
           rules:
-          # Allow the service account to get and list pods, services, and jobs
-          - apiGroups: ["", "batch"]
-            resources: ["pods","services", "jobs"]
+          # Allow the service account to get and list pods and services
+          - apiGroups: [""]
+            resources: ["pods","services"]
+            verbs: ["get", "list", "watch"]
+          # Allow the service account to get and list jobs
+          - apiGroups: ["batch"]
+            resources: ["jobs"]
             verbs: ["get", "list", "watch"]
           # Allow the service account to delete jobs
           - apiGroups: ["batch"]
