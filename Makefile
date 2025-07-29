@@ -88,14 +88,14 @@ test-cluster-setup:
 # Installs your application into this namespace using `mpdev`.
 test-install:
 	mpdev install --deployer=$(deployer_image):$(release_version) \
-		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
+		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.epmrpp.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
 
 # Verifies that your application is installed correctly.
 verify:
 	mpdev verify \
 	--deployer=$(deployer_image):$(release_version) \
 	--wait_timeout=1800 \
-	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.docs.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
+	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.epmrpp.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
 
 clean-cluster: 
 	@ echo
