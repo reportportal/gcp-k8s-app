@@ -1,6 +1,6 @@
 dependencies:
 - name: reportportal
   repository: https://reportportal.io/kubernetes
-  version: 25.7.3
-digest: sha256:5b2a4bfa88b69c4254c0aafe8ae6822f299dd334366d360d28427346f5a808c7
-generated: "2025-07-28T13:23:21.45350565+02:00"
+  version: 25.7.30
+digest: sha256:a720f1848f2cda6879fcdb84bf4e108b37074e70049298f5e86ef6508b1182d4
+generated: "2025-07-30T15:51:06.277525171+02:00"

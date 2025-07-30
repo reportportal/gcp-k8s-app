@@ -48,6 +48,9 @@ reportportal:
       initialDelaySeconds: 200
     service:
       type: NodePort
+    extraEnvs:
+      - name: SERVER_FORWARD_HEADERS_STRATEGY
+        value: "FRAMEWORK"
       
   uat:
     resources:
@@ -62,6 +65,9 @@ reportportal:
       type: NodePort
     superadminInitPasswd:
       password: ""
+    extraEnvs:
+      - name: SERVER_FORWARD_HEADERS_STRATEGY
+        value: "FRAMEWORK"
       
   servicejobs:
     resources:
