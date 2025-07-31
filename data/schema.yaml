@@ -57,7 +57,7 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.image.tag:
           type: TAG
-    postgresql16:
+    postgresql-17:
       properties:
         reportportal.postgresql.image.registry:
           type: REGISTRY
@@ -65,7 +65,7 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.postgresql.image.tag:
           type: TAG
-    rabbitmq3:
+    rabbitmq-4:
       properties:
         reportportal.rabbitmq.image.registry:
           type: REGISTRY
@@ -73,13 +73,13 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.rabbitmq.image.tag:
           type: TAG
-    opensearch2:
+    opensearch-2:
       properties:
         reportportal.opensearch.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio2024:
+    minio-2025:
       properties:
         reportportal.minio.image.registry:
           type: REGISTRY
