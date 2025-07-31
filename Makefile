@@ -48,6 +48,7 @@ deploy: info
 	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_track)
 	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_version)
 
+# Publishes the Deployer image and all dependencies to GCR.
 deploy-deps: info configure
 	@ echo
 	@ echo "Running publishing images..."
