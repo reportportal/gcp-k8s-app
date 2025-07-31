@@ -12,7 +12,7 @@ old_repo = os.getenv("OLD_REPO", "reportportal")
 new_registry = os.getenv("NEW_REGISTRY", "gcr.io")
 new_repo = os.getenv("NEW_REPO", "epam-mp-rp/reportportal")
 target_images = os.getenv("TARGET_IMAGES", "")
-rpp_service_name = os.getenv("RPP_SERVICE_NAME", "reportportal.endpoints.epam-mp-rp.cloud.goog")
+rpp_service_name = os.getenv("RPP_SERVICE_NAME", "services/reportportal.endpoints.epam-mp-rp.cloud.goog")
 
 def load_yaml(file_path):
     with open(file_path, "r") as file:
