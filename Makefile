@@ -1,7 +1,7 @@
 # Description: Makefile for ReportPortal GCP Marketplace application
 registry := gcr.io
 app_name := reportportal
-gcp_project := or2-msq-epm-rpp-b2iylu
+gcp_project := epam-mp-rp
 repository := $(registry)/$(gcp_project)/$(app_name)
 release_version := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Chart.yaml)
 release_track := $(shell echo $(release_version) | cut -d. -f1,2)
@@ -13,6 +13,7 @@ cluster_location := us-central1-a
 machine_type := custom-4-6144
 num_nodes := 3
 namespace := test-ns
+rpp_service_name := services/reportportal.endpoints.epam-mp-rp.cloud.goog
 
 # Deploy all images to GCR.
 default: deploy-all
@@ -44,8 +45,8 @@ deploy: info
 		--build-arg TAG=$(release_version) \
 		--push \
 		./data
-	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" $(deployer_image):$(release_track)
-	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" $(deployer_image):$(release_version)
+	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_track)
+	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_version)
 
 deploy-deps: info configure
 	@ echo
@@ -95,7 +96,7 @@ verify:
 	mpdev verify \
 	--deployer=$(deployer_image):$(release_version) \
 	--wait_timeout=1800 \
-	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.epmrpp.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
+	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
 
 clean-cluster: 
 	@ echo
