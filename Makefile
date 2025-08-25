@@ -13,6 +13,7 @@ cluster_location := us-central1-a
 machine_type := custom-4-6144
 num_nodes := 3
 namespace := test-ns
+rpp_service_name := services/reportportal.endpoints.epam-mp-rp.cloud.goog
 
 # Deploy all images to GCR.
 default: deploy-all
@@ -44,9 +45,10 @@ deploy: info
 		--build-arg TAG=$(release_version) \
 		--push \
 		./data
-	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" $(deployer_image):$(release_track)
-	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=reportportal.endpoints.epam-mp-rp.cloud.goog" $(deployer_image):$(release_version)
+	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_track)
+	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_version)
 
+# Publishes the Deployer image and all dependencies to GCR.
 deploy-deps: info configure
 	@ echo
 	@ echo "Running publishing images..."
@@ -68,27 +70,36 @@ deploy-all: deploy deploy-deps
 # Creates a new Kubernetes cluster in your Google Cloud project.
 test-cluster:
 	@ echo
+	@ echo "Creating a new Kubernetes cluster in project $(gcp_project)..."
+	@ gcloud config set project $(gcp_project)
 	@ echo "Creating cluster $(cluster_name) in $(cluster_location)..."
 	@ gcloud container clusters create $(cluster_name) \
 		--location=$(cluster_location) \
 		--machine-type=${machine_type} \
 		--num-nodes=${num_nodes}
+
+# Sets up the cluster for testing deployer.
+test-cluster-setup:
 	@ echo
 	@ echo "Add the application support CRD to the cluster..."
 	@ kubectl apply -f "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-k8s-app-tools/master/crd/app-crd.yaml"
+	@ echo
+	@ echo "Creating namespace $(namespace)..."
 	@ kubectl create namespace $(namespace)
+	@ echo
+	@ echo "Cluster setup complete."
 
-# Creates a new Kubernetes namespace called `test-ns` and installs your application into this namespace using `mpdev`.
+# Installs your application into this namespace using `mpdev`.
 test-install:
 	mpdev install --deployer=$(deployer_image):$(release_version) \
-		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
+		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.epmrpp.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
 
 # Verifies that your application is installed correctly.
 verify:
 	mpdev verify \
 	--deployer=$(deployer_image):$(release_version) \
 	--wait_timeout=1800 \
-	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.docs.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
+	--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"}'
 
 clean-cluster: 
 	@ echo

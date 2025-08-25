@@ -51,19 +51,13 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.serviceanalyzer.image.tag:
           type: TAG
-    reportportal-metricsgatherer:
-      properties:
-        reportportal.metricsgatherer.image.repository:
-          type: REPO_WITH_REGISTRY
-        reportportal.metricsgatherer.image.tag:
-          type: TAG
     reportportal-migrations:
       properties:
         reportportal.migrations.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.image.tag:
           type: TAG
-    postgresql16:
+    postgresql-17:
       properties:
         reportportal.postgresql.image.registry:
           type: REGISTRY
@@ -71,7 +65,7 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.postgresql.image.tag:
           type: TAG
-    rabbitmq3:
+    rabbitmq-4:
       properties:
         reportportal.rabbitmq.image.registry:
           type: REGISTRY
@@ -79,13 +73,13 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         reportportal.rabbitmq.image.tag:
           type: TAG
-    opensearch2:
+    opensearch-2:
       properties:
         reportportal.opensearch.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio2024:
+    minio-2025:
       properties:
         reportportal.minio.image.registry:
           type: REGISTRY
@@ -127,13 +121,13 @@ properties:
       type: GENERATED_PASSWORD
       generatedPassword:
         length: 16
-        includeSymbols: False
+        includeSymbols: True
         base64: False
-  reportportal.serviceAccount.name:
-    title: Service Account Name
+  global.serviceAccount.name:
+    title: ReportPortal Service Account
     type: string
     default: reportportal
-    description: The name of the service account to create.
+    description: ReportPortal service account for bootstrapping the application.
     x-google-marketplace:
       type: SERVICE_ACCOUNT
       serviceAccount:
@@ -152,9 +146,13 @@ properties:
         - type: Role
           rulesType: CUSTOM
           rules:
-          # Allow the service account to get and list pods, services, and jobs
-          - apiGroups: ["", "batch"]
-            resources: ["pods","services", "jobs"]
+          # Allow the service account to get and list pods and services
+          - apiGroups: [""]
+            resources: ["pods","services"]
+            verbs: ["get", "list", "watch"]
+          # Allow the service account to get and list jobs
+          - apiGroups: ["batch"]
+            resources: ["jobs"]
             verbs: ["get", "list", "watch"]
           # Allow the service account to delete jobs
           - apiGroups: ["batch"]
