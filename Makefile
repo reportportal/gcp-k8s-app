@@ -1,7 +1,7 @@
 # Description: Makefile for ReportPortal GCP Marketplace application
 registry := gcr.io
 app_name := reportportal
-gcp_project := or2-msq-epm-rpp-b2iylu
+gcp_project :=
 repository := $(registry)/$(gcp_project)/$(app_name)
 release_version := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Chart.yaml)
 release_track := $(shell echo $(release_version) | cut -d. -f1,2)
