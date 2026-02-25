@@ -72,7 +72,7 @@ make info
 Create a new deployer image with the updated version:
 
 ```bash
-make deploy
+make deploy-deployer
 ```
 
 After deploy verify that the image pushed successfully:
@@ -86,7 +86,7 @@ gcloud container images list-tags gcr.io/epam-mp-rp/reportportal/deployer
 You need to upload the images to the Google Cloud Artifact Registry:
 
 ```bash
-make deploy-deps
+make deploy-services
 ```
 
 After the images are uploaded, verify that they are available:

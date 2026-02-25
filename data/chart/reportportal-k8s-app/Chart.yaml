@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: "25.1.8"
+appVersion: "26.0.1"
 description: ReportPortal.io AI-powered Test Automation Dashboard
 name: reportportal-k8s-app
-version: &version 25.8.21
+version: &version 26.2.6
 sources:
 - https://github.com/reportportal/gcp-k8s-app
 keywords:

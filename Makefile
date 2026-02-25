@@ -1,7 +1,7 @@
 # Description: Makefile for ReportPortal GCP Marketplace application
 registry := gcr.io
 app_name := reportportal
-gcp_project := epam-mp-rp
+gcp_project := or2-msq-epm-rpp-b2iylu
 repository := $(registry)/$(gcp_project)/$(app_name)
 release_version := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Chart.yaml)
 release_track := $(shell echo $(release_version) | cut -d. -f1,2)
@@ -16,13 +16,13 @@ namespace := test-ns
 rpp_service_name := services/reportportal.endpoints.epam-mp-rp.cloud.goog
 
 # Deploy all images to GCR.
-default: deploy-all
+default: deploy
 
 info:
 	@ echo
 	@ echo "Release track: $(release_track)"
 	@ echo "Release version: $(release_version)"
-	@ echo "Dependency version: $(dependency_chart_version)"
+	@ echo "Helm chart version: $(dependency_chart_version)"
 	@ echo "Deployer image: $(deployer_image)"
 
 # Configures Docker to use gcloud as a credential helper.
@@ -31,13 +31,15 @@ configure:
 	@ echo "Configuring Docker to use gcloud as a credential helper..."
 	@ gcloud auth configure-docker gcr.io --quiet
 
-# Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
-deploy: info
-	@ echo
-	@ echo "Building image $(deployer_image)"
+helm-init:
 	@ helm repo add reportportal https://reportportal.io/kubernetes
 	@ helm dependency update data/chart/reportportal-k8s-app
 	@ helm dependency build data/chart/reportportal-k8s-app
+
+# Builds a Deployer Docker image and tags it with the name of your Google Cloud Registry.
+deploy-deployer: info helm-init
+	@ echo
+	@ echo "Building image $(deployer_image)"
 	@ docker buildx build \
 		--tag $(deployer_image):$(release_track) \
 		--tag $(deployer_image):$(release_version) \
@@ -49,9 +51,9 @@ deploy: info
 	@ crane mutate -a "com.googleapis.cloudmarketplace.product.service.name=$(rpp_service_name)" $(deployer_image):$(release_version)
 
 # Publishes the Deployer image and all dependencies to GCR.
-deploy-deps: info configure
+deploy-services: info configure
 	@ echo
-	@ echo "Running publishing images..."
+	@ echo "Running publishing services..."
 	@ echo "Getting values from dependency chart..."
 	@ helm dependency build data/chart/reportportal-k8s-app
 	@ helm inspect values data/chart/reportportal-k8s-app/charts/reportportal-$(dependency_chart_version).tgz > $(values_path)
@@ -65,7 +67,7 @@ deploy-deps: info configure
 		python scripts/publish-gcr.py
 
 # Deploys deployer image and dependence's images ti GCR.
-deploy-all: deploy deploy-deps
+deploy: deploy-deployer deploy-services
 
 # Creates a new Kubernetes cluster in your Google Cloud project.
 test-cluster:
@@ -92,7 +94,7 @@ test-cluster-setup:
 # Installs your application into this namespace using `mpdev`.
 test-install:
 	mpdev install --deployer=$(deployer_image):$(release_version) \
-		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)", "reportportal.ingress.hosts":"gcp.epmrpp.reportportal.io", "reportportal.ingress.tls.certificate.gcpManaged":true}'
+		--parameters='{"name": "$(app_name)", "namespace": "$(namespace)"'
 
 # Verifies that your application is installed correctly.
 verify:
