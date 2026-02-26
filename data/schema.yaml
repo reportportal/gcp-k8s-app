@@ -85,7 +85,7 @@ x-google-marketplace:
           type: REPO_WITHOUT_REGISTRY
         rabbitmq.image.tag:
           type: TAG
-    postgresql-17:
+    postgresql-18:
       properties:
         postgresql.image.registry:
           type: REGISTRY
