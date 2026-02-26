@@ -52,7 +52,7 @@ reportportal:
   serviceui:
     image:
       repository: reportportal/service-ui
-      tag: 5.15.1
+      tag: latest
     resources:
       requests:
         cpu: 200m
@@ -78,7 +78,7 @@ reportportal:
   uat:
     image:
       repository: reportportal/service-authorization
-      tag: 5.15.0
+      tag: latest
     resources:
       requests:
         cpu: 500m
@@ -95,7 +95,7 @@ reportportal:
   servicejobs:
     image:
       repository: reportportal/service-jobs
-      tag: 5.15.0
+      tag: latest
     resources:
       requests:
         cpu: 250m
@@ -108,7 +108,7 @@ reportportal:
   serviceanalyzer:
     image:
       repository: reportportal/service-auto-analyzer
-      tag: 5.15.1
+      tag: latest
     resources:
       requests:
         cpu: 500m
