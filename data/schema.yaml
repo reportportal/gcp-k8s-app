@@ -57,41 +57,41 @@ x-google-marketplace:
           type: REPO_WITH_REGISTRY
         reportportal.migrations.image.tag:
           type: TAG
-    postgresql-17:
-      properties:
-        reportportal.postgresql.image.registry:
-          type: REGISTRY
-        reportportal.postgresql.image.repository:
-          type: REPO_WITHOUT_REGISTRY
-        reportportal.postgresql.image.tag:
-          type: TAG
-    rabbitmq-4:
-      properties:
-        reportportal.rabbitmq.image.registry:
-          type: REGISTRY
-        reportportal.rabbitmq.image.repository:
-          type: REPO_WITHOUT_REGISTRY
-        reportportal.rabbitmq.image.tag:
-          type: TAG
     opensearch-2:
       properties:
         reportportal.opensearch.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.opensearch.image.tag:
           type: TAG
-    minio-2025:
-      properties:
-        reportportal.minio.image.registry:
-          type: REGISTRY
-        reportportal.minio.image.repository:
-          type: REPO_WITHOUT_REGISTRY
-        reportportal.minio.image.tag:
-          type: TAG
     k8s-wait-for:
       properties:
         reportportal.k8sWaitFor.image.repository:
           type: REPO_WITH_REGISTRY
         reportportal.k8sWaitFor.image.tag:
+          type: TAG
+    minio-2025:
+      properties:
+        minio.image.registry:
+          type: REGISTRY
+        minio.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        minio.image.tag:
+          type: TAG
+    rabbitmq-4:
+      properties:
+        rabbitmq.image.registry:
+          type: REGISTRY
+        rabbitmq.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        rabbitmq.image.tag:
+          type: TAG
+    postgresql-17:
+      properties:
+        postgresql.image.registry:
+          type: REGISTRY
+        postgresql.image.repository:
+          type: REPO_WITHOUT_REGISTRY
+        postgresql.image.tag:
           type: TAG
 properties:
   name:

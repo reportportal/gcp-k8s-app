@@ -7,7 +7,7 @@ release_version := $(shell yq e '.appVersion' data/chart/reportportal-k8s-app/Ch
 release_track := $(shell echo $(release_version) | cut -d. -f1,2)
 dependency_chart_version := $(shell yq e '.version' data/chart/reportportal-k8s-app/Chart.yaml)
 deployer_image := $(repository)/deployer
-values_path := $(shell mkdir -p tmp && touch tmp/values.yaml && echo tmp/values.yaml)
+values_path := data/chart/reportportal-k8s-app/values.yaml
 cluster_name := rp-mp-test-cluster
 cluster_location := us-central1-a
 machine_type := custom-4-6144
@@ -56,7 +56,6 @@ deploy-services: info configure
 	@ echo "Running publishing services..."
 	@ echo "Getting values from dependency chart..."
 	@ helm dependency build data/chart/reportportal-k8s-app
-	@ helm inspect values data/chart/reportportal-k8s-app/charts/reportportal-$(dependency_chart_version).tgz > $(values_path)
 	@ echo
 	@ VALUES_PATH=$(values_path) \
 		NEW_REGISTRY=$(registry) \

@@ -43,10 +43,16 @@ reportportal:
       enabled: true
 
   serviceindex:
+    image:
+      repository: reportportal/service-index
+      tag: latest
     service:
       type: NodePort
 
   serviceui:
+    image:
+      repository: reportportal/service-ui
+      tag: 5.15.1
     resources:
       requests:
         cpu: 200m
@@ -56,8 +62,8 @@ reportportal:
 
   serviceapi:
     image:
-      repository:
-      tag:
+      repository: reportportal/service-api
+      tag: latest
     resources:
       requests:
         cpu: 1
@@ -70,6 +76,9 @@ reportportal:
       type: NodePort
 
   uat:
+    image:
+      repository: reportportal/service-authorization
+      tag: 5.15.0
     resources:
       requests:
         cpu: 500m
@@ -84,6 +93,9 @@ reportportal:
       password: ""
 
   servicejobs:
+    image:
+      repository: reportportal/service-jobs
+      tag: 5.15.0
     resources:
       requests:
         cpu: 250m
@@ -94,6 +106,9 @@ reportportal:
       initialDelaySeconds: 300
 
   serviceanalyzer:
+    image:
+      repository: reportportal/service-auto-analyzer
+      tag: 5.15.1
     resources:
       requests:
         cpu: 500m
