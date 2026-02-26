@@ -6,6 +6,23 @@ global:
     name: ""
 
 reportportal:
+  database:
+    port: &dbport 5432
+    user: &dbuser postgres
+    dbName: &dbname reportportal
+    password: &dbpassword rppassword
+
+  msgbroker:
+    port: &msgbrokerPort 5672
+    user: &msgbrokerUser rabbitmq
+    apiport: &msgbrokerApiPort 15672
+    apiuser: *msgbrokerUser
+    password: &msgbrokerPass rabbitmqpassword
+
+  storage:
+    accesskey: &storageAccessKey rpuser
+    secretkey: &storageSecretKey miniopassword
+
   rbac:
     create: false
 
@@ -38,6 +55,9 @@ reportportal:
       type: NodePort
 
   serviceapi:
+    image:
+      repository:
+      tag:
     resources:
       requests:
         cpu: 1
@@ -48,7 +68,7 @@ reportportal:
       initialDelaySeconds: 200
     service:
       type: NodePort
-      
+
   uat:
     resources:
       requests:
@@ -62,7 +82,7 @@ reportportal:
       type: NodePort
     superadminInitPasswd:
       password: ""
-      
+
   servicejobs:
     resources:
       requests:
@@ -78,3 +98,64 @@ reportportal:
       requests:
         cpu: 500m
         memory: 1Gi
+
+  opensearch:
+    image:
+      repository: opensearchproject/opensearch
+      tag: 2.19.4
+
+  postgresql:
+    install: false
+
+  rabbitmq:
+    install: false
+
+  minio:
+    install: false
+
+postgresql:
+  image:
+    repository: bitnamilegacy/rabbitmq
+    tag: latest
+  auth:
+    postgresPassword: *dbpassword
+    username: *dbuser
+    password: *dbpassword
+    database: *dbname
+  primary:
+    service:
+      ports:
+        postgresql: *dbport
+
+rabbitmq:
+  image:
+    repository: bitnamilegacy/rabbitmq
+    tag: latest
+  auth:
+    username: *msgbrokerUser
+    password: *msgbrokerPass
+  containerPorts:
+    amqp: *msgbrokerPort
+    manager: *msgbrokerApiPort
+  extraPlugins: >
+    rabbitmq_auth_backend_ldap
+    rabbitmq_consistent_hash_exchange
+    rabbitmq_shovel
+    rabbitmq_shovel_management
+  extraConfiguration: |-
+    max_message_size = 134217728
+  ingress:
+    tls: [ ]
+
+minio:
+  image:
+    repository: bitnamilegacy/minio
+    tag: latest
+  auth:
+    rootUser: *storageAccessKey
+    rootPassword: *storageSecretKey
+  persistence:
+    annotations:
+      "helm.sh/resource-policy": "keep"
+  console:
+    enabled: false

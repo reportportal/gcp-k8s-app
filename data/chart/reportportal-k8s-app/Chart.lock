@@ -2,5 +2,14 @@ dependencies:
 - name: reportportal
   repository: https://reportportal.io/kubernetes
   version: 26.2.6
-digest: sha256:7fd9cd1762cc7706bdaf05054db8e248a75bcfe418cd43d3151a01a1edaea29b
-generated: "2026-02-25T16:09:30.12615083+01:00"
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.5.1
+- name: rabbitmq
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.0.11
+- name: minio
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.0.16
+digest: sha256:6d939583a9a434ba4835f3c1db162d52f460aee28bba77b68d018e8230d6e8da
+generated: "2026-02-26T16:50:36.962883786+01:00"
