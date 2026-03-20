@@ -20,8 +20,13 @@ reportportal:
     password: &msgbrokerPass rabbitmqpassword
 
   storage:
-    accesskey: &storageAccessKey rpuser
-    secretkey: &storageSecretKey miniopassword
+    type: filesystem
+    bucket:
+    volume:
+      capacity: 100Gi #1Ti
+    csi:
+      driver: gcsfuse.csi.storage.gke.io
+      volumeHandle: #bucket name
 
   rbac:
     create: false
@@ -161,16 +166,3 @@ rabbitmq:
     max_message_size = 134217728
   ingress:
     tls: [ ]
-
-minio:
-  image:
-    repository: bitnamilegacy/minio
-    tag: latest
-  auth:
-    rootUser: *storageAccessKey
-    rootPassword: *storageSecretKey
-  persistence:
-    annotations:
-      "helm.sh/resource-policy": "keep"
-  console:
-    enabled: false

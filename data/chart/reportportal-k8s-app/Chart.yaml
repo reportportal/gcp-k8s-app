@@ -31,6 +31,3 @@ dependencies:
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
   version: 16.0.11
-- name: minio
-  repository: https://charts.bitnami.com/bitnami
-  version: 17.0.16

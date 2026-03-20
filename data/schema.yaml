@@ -123,6 +123,10 @@ properties:
         length: 16
         includeSymbols: True
         base64: False
+  reportportal.storage.csi.volumeHandle:
+    title: Bucket Name
+    type: string
+    description: Google Cloud Storage Bucket Name. It's an optional field for using your Cloud Storage Bucket.
   global.serviceAccount.name:
     title: ReportPortal Service Account
     type: string
